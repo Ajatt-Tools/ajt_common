@@ -5,7 +5,7 @@
 #
 from aqt import mw
 from aqt.qt import *
-from aqt.utils import disable_help_button, openLink
+from aqt.utils import openLink
 from aqt.webview import AnkiWebView
 
 from .consts import *
@@ -14,8 +14,6 @@ from .consts import *
 class AboutDialog(QDialog):
     def __init__(self, parent: QWidget):
         super(AboutDialog, self).__init__(parent=parent or mw)
-        disable_help_button(self)
-        mw.garbage_collect_on_dialog_finish(self)
         self.setWindowModality(Qt.ApplicationModal)
         self.setWindowTitle(f'{DIALOG_NAME} {ADDON_SERIES}')
         self.setSizePolicy(self.make_size_policy())
