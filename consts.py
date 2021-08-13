@@ -1,3 +1,5 @@
+import os
+
 ADDON_SERIES = 'AJT'
 DIALOG_NAME = 'About'
 ANKIWEB_LINK = 'https://ankiweb.net/shared/byauthor/1425504015'
@@ -7,10 +9,17 @@ DONATE_LINK = 'https://tatsumoto.neocities.org/blog/donating-to-tatsumoto.html'
 TG_LINK = 'https://t.me/ajatt_tools'
 GITHUB_LINK = 'https://github.com/Ajatt-Tools'
 
+IMG_DIR = os.path.join(os.path.normpath(os.path.dirname(__file__)), 'img')
+CHAT_ICON_PATH = os.path.join(IMG_DIR, 'element.svg')
+DONATE_ICON_PATH = os.path.join(IMG_DIR, 'patreon_logo.svg')
+
+BUTTON_HEIGHT = 32
+
 STYLES = '''
 <style>
 a { color: SteelBlue; }
 h2 { text-align: center; }
+body { margin: 0 4px 0; }
 </style>
 '''
 

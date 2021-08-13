@@ -5,7 +5,7 @@
 #
 from aqt import mw
 from aqt.qt import *
-from aqt.utils import disable_help_button
+from aqt.utils import disable_help_button, openLink
 from aqt.webview import AnkiWebView
 
 from .consts import *
@@ -26,20 +26,42 @@ class AboutDialog(QDialog):
         webview = AnkiWebView(parent=self)
         webview.setProperty("url", QUrl("about:blank"))
         webview.stdHtml(html_content, js=[])
-        webview.setMinimumSize(480, 360)
+        webview.setMinimumSize(480, 320)
         return webview
 
     def make_button_box(self) -> QWidget:
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok, Qt.Horizontal, self)
-        button_box.accepted.connect(self.accept)
-        button_box.rejected.connect(self.reject)
-        return button_box
+        def ok():
+            but = QPushButton('Ok')
+            qconnect(but.clicked, self.accept)
+            but.setFixedHeight(BUTTON_HEIGHT)
+            return but
+
+        def community():
+            but = QPushButton('Join our community')
+            qconnect(but.clicked, lambda: openLink(COMMUNITY_LINK))
+            but.setIcon(QIcon(CHAT_ICON_PATH))
+            but.setFixedHeight(BUTTON_HEIGHT)
+            return but
+
+        def donate():
+            but = QPushButton('Donate')
+            qconnect(but.clicked, lambda: openLink(DONATE_LINK))
+            but.setIcon(QIcon(DONATE_ICON_PATH))
+            but.setFixedHeight(BUTTON_HEIGHT)
+            return but
+
+        but_box = QHBoxLayout()
+        but_box.addWidget(ok())
+        but_box.addStretch()
+        but_box.addWidget(community())
+        but_box.addWidget(donate())
+
+        return but_box
 
     def make_root_layout(self) -> QLayout:
         root_layout = QVBoxLayout()
         root_layout.addWidget(self.make_about_webview(ABOUT_MSG))
-        root_layout.addWidget(self.make_button_box())
-        root_layout.setContentsMargins(0, 0, 0, 0)
+        root_layout.addLayout(self.make_button_box())
         return root_layout
 
     def make_size_policy(self) -> QSizePolicy:
