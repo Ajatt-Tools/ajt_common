@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright: (C) 2021 Ren Tatsumoto <tatsu at autistici.org>
+# License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
+#
+
 import os
 
 ADDON_SERIES = 'AJT'
