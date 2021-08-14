@@ -20,6 +20,7 @@ CHAT_ICON_PATH = os.path.join(IMG_DIR, 'element.svg')
 DONATE_ICON_PATH = os.path.join(IMG_DIR, 'patreon_logo.svg')
 
 BUTTON_HEIGHT = 32
+ICON_SIDE_LEN = 18
 
 STYLES = '''
 <style>

@@ -49,6 +49,7 @@ class AboutDialog(QDialog):
             but = QPushButton('Join our community')
             qconnect(but.clicked, lambda: openLink(COMMUNITY_LINK))
             but.setIcon(QIcon(CHAT_ICON_PATH))
+            but.setIconSize(QSize(ICON_SIDE_LEN, ICON_SIDE_LEN))
             but.setFixedHeight(BUTTON_HEIGHT)
             return but
 
@@ -56,6 +57,7 @@ class AboutDialog(QDialog):
             but = QPushButton('Donate')
             qconnect(but.clicked, lambda: openLink(DONATE_LINK))
             but.setIcon(QIcon(DONATE_ICON_PATH))
+            but.setIconSize(QSize(ICON_SIDE_LEN, ICON_SIDE_LEN))
             but.setFixedHeight(BUTTON_HEIGHT)
             return but
 
