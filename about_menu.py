@@ -95,7 +95,7 @@ def menu_root_entry() -> QMenu:
 def create_about_action(parent: QWidget) -> QAction:
     def open_about_dialog():
         dialog = AboutDialog(mw)
-        return dialog.exec_()
+        return dialog.exec()
 
     action = QAction(f'{DIALOG_NAME}...', parent)
     qconnect(action.triggered, open_about_dialog)
