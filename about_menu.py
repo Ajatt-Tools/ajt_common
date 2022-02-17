@@ -11,14 +11,24 @@ from aqt.webview import AnkiWebView
 from .consts import *
 
 
-def tweak_window(dialog: QDialog) -> None:
+def garbage_collect_on_dialog_finish(dialog: QDialog):
     try:
         mw.garbage_collect_on_dialog_finish(dialog)
+    except AttributeError:
+        pass
 
+
+def disable_help_button(dialog: QDialog):
+    try:
         from aqt.utils import disable_help_button
         disable_help_button(dialog)
-    except (ImportError, AttributeError):
+    except ImportError:
         pass
+
+
+def tweak_window(dialog: QDialog) -> None:
+    garbage_collect_on_dialog_finish(dialog)
+    disable_help_button(dialog)
 
 
 class AboutDialog(QDialog):
