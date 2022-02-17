@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-#
 # Copyright: (C) 2021 Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
-#
+
 from aqt import mw
 from aqt.qt import *
 from aqt.utils import openLink
@@ -20,8 +18,8 @@ def garbage_collect_on_dialog_finish(dialog: QDialog):
 
 def disable_help_button(dialog: QDialog):
     try:
-        from aqt.utils import disable_help_button
-        disable_help_button(dialog)
+        from aqt.utils import disable_help_button as _disable_help_button
+        _disable_help_button(dialog)
     except ImportError:
         pass
 
@@ -32,8 +30,8 @@ def tweak_window(dialog: QDialog) -> None:
 
 
 class AboutDialog(QDialog):
-    def __init__(self, parent: QWidget):
-        super(AboutDialog, self).__init__(parent=parent or mw)
+    def __init__(self, parent: QWidget, *args, **kwargs):
+        super().__init__(parent=parent or mw, *args, **kwargs)
         tweak_window(self)
         self.setWindowModality(Qt.ApplicationModal)
         self.setWindowTitle(f'{DIALOG_NAME} {ADDON_SERIES}')
@@ -105,7 +103,7 @@ def menu_root_entry() -> QMenu:
 def create_about_action(parent: QWidget) -> QAction:
     def open_about_dialog():
         dialog = AboutDialog(mw)
-        return dialog.exec_()
+        return dialog.exec()
 
     action = QAction(f'{DIALOG_NAME}...', parent)
     qconnect(action.triggered, open_about_dialog)
