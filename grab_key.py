@@ -30,9 +30,12 @@ class KeyPressDialog(QDialog):
         return layout
 
     def _accept_value(self, value: Optional[str]) -> None:
+        self.set_value(value)
+        self.accept()
+
+    def set_value(self, value: Optional[str]) -> None:
         self._shortcut = value
         self.value_accepted.emit(value)  # type: ignore
-        self.accept()
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         # https://stackoverflow.com/questions/35033116
@@ -63,6 +66,9 @@ class ShortCutGrabButton(QPushButton):
         self._dialog = KeyPressDialog(self, initial_value)
         qconnect(self.clicked, self._dialog.exec)
         qconnect(self._dialog.value_accepted, lambda value: self.setText(value or self._placeholder))
+
+    def setValue(self, value: str):
+        self._dialog.set_value(value)
 
     def value(self) -> str:
         return self._dialog.value() or ""
