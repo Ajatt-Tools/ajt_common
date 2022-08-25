@@ -46,7 +46,7 @@ class AboutDialog(QDialog):
         webview.setMinimumSize(480, 320)
         return webview
 
-    def make_button_box(self) -> QWidget:
+    def make_button_box(self) -> QLayout:
         def ok():
             but = QPushButton('Ok')
             qconnect(but.clicked, self.accept)
