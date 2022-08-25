@@ -91,12 +91,17 @@ class AboutDialog(QDialog):
         return size_policy
 
 
+def addon_folder_name() -> str:
+    return ''.join(__name__.split('.')[:1])
+
+
 def menu_root_entry() -> QMenu:
     if not hasattr(mw.form, 'ajt_root_menu'):
-        mw.form.ajt_root_menu = QMenu(ADDON_SERIES, mw)
+        mw.form.ajt_root_menu = QMenu(f'&{ADDON_SERIES}', mw)
         mw.form.menubar.insertMenu(mw.form.menuHelp.menuAction(), mw.form.ajt_root_menu)
         mw.form.ajt_root_menu.addAction(create_about_action(mw.form.ajt_root_menu))
         mw.form.ajt_root_menu.addSeparator()
+        print(f"{addon_folder_name()} inserted a new menu.")
     return mw.form.ajt_root_menu
 
 
