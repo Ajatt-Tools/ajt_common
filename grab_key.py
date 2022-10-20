@@ -6,9 +6,49 @@ from typing import Optional
 from aqt.qt import *
 
 
+def mod_mask_qt5():
+    return (
+            Qt.Modifier.CTRL |
+            Qt.Modifier.ALT |
+            Qt.Modifier.SHIFT |
+            Qt.Modifier.META
+    )
+
+
+def mod_mask_qt6():
+    return (
+            Qt.KeyboardModifier.ControlModifier |
+            Qt.KeyboardModifier.AltModifier |
+            Qt.KeyboardModifier.ShiftModifier |
+            Qt.KeyboardModifier.MetaModifier
+    )
+
+
+def forbidden_keys():
+    return (
+        Qt.Key.Key_Shift,
+        Qt.Key.Key_Alt,
+        Qt.Key.Key_Control,
+        Qt.Key.Key_Meta,
+    )
+
+
+def modifiers_allowed(modifiers) -> bool:
+    try:
+        return modifiers & mod_mask_qt5() == modifiers
+    except TypeError:
+        return modifiers & mod_mask_qt6() == modifiers  # Qt6
+
+
+def to_int(modifiers) -> int:
+    try:
+        return int(modifiers)
+    except TypeError:
+        return int(modifiers.value)  # Qt6
+
+
 class KeyPressDialog(QDialog):
-    MOD_MASK = Qt.CTRL | Qt.ALT | Qt.SHIFT | Qt.META
-    value_accepted = pyqtSignal(str)
+    value_accepted = pyqtSignal(str)  # type: ignore
 
     def __init__(self, parent: QWidget = None, initial_value: str = None, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -24,7 +64,7 @@ class KeyPressDialog(QDialog):
             "Supported modifiers: CTRL, ALT, SHIFT or META.\n"
             "Press ESC to delete the shortcut."
         )
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout = QVBoxLayout()
         layout.addWidget(label)
         return layout
@@ -39,20 +79,19 @@ class KeyPressDialog(QDialog):
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         # https://stackoverflow.com/questions/35033116
-        key, modifiers = int(event.key()), int(event.modifiers())
+        key = int(event.key())
+        modifiers = event.modifiers()
 
-        if key == Qt.Key_Escape:
+        if key == Qt.Key.Key_Escape:
             self._accept_value(None)
         elif (
                 modifiers
-                and modifiers & self.MOD_MASK == modifiers
+                and modifiers_allowed(modifiers)
                 and key > 0
-                and key != Qt.Key_Shift
-                and key != Qt.Key_Alt
-                and key != Qt.Key_Control
-                and key != Qt.Key_Meta
+                and key not in forbidden_keys()
+
         ):
-            self._accept_value(QKeySequence(modifiers + key).toString())
+            self._accept_value(QKeySequence(to_int(modifiers) + key).toString())
 
     def value(self) -> Optional[str]:
         return self._shortcut
