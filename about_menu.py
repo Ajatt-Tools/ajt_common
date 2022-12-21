@@ -44,6 +44,7 @@ class AboutDialog(QDialog):
         webview.setProperty("url", QUrl("about:blank"))
         webview.stdHtml(html_content, js=[])
         webview.setMinimumSize(480, 320)
+        webview.disable_zoom()
         return webview
 
     def make_button_box(self) -> QLayout:
