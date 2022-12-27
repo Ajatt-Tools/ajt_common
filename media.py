@@ -14,12 +14,15 @@ def unquote_filenames(filenames: list[str]) -> list[str]:
 
 
 def find_sounds(html: str) -> list[str]:
+    """Return a list of audio files referenced in html."""
     return unquote_filenames(re.findall(SOUND_TAG_REGEX, html))
 
 
 def find_images(html: str) -> list[str]:
+    """Return a list of images referenced in html."""
     return unquote_filenames(re.findall(IMAGE_TAG_REGEX, html))
 
 
 def find_all_media(html: str) -> list[str]:
+    """Return a list of image and audio files referenced in html."""
     return find_images(html) + find_sounds(html)
