@@ -1,7 +1,7 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
-from typing import Callable
+from typing import Callable, Iterable, Any
 
 from aqt import mw
 
@@ -64,10 +64,15 @@ class AddonConfigManager:
         for key in self._default_config:
             yield key, self[key]
 
-    def toggleables(self):
+    def toggleables(self) -> Iterable[tuple[str, Any]]:
         for key, val in self.items():
             if isinstance(val, bool):
                 yield key, val
+
+    @classmethod
+    def bool_keys(cls) -> Iterable[str]:
+        """Returns an iterable of boolean keys in the config."""
+        return (key for key, value in cls._default_config.items() if isinstance(value, bool))
 
     def update(self, another):
         if all(key in self._default_config for key in another):
