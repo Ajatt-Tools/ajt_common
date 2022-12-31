@@ -47,7 +47,12 @@ class AddonConfigManager:
         return self._get(key)
 
     def __setitem__(self, key, value):
-        self._config[key] = value
+        try:
+            self._get(key)
+        except KeyError:
+            raise
+        else:
+            self._config[key] = value
 
     def get(self, key, default=None):
         try:
