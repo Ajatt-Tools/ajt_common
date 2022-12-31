@@ -1,5 +1,6 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
+
 from typing import Callable
 
 from aqt import mw
@@ -62,6 +63,12 @@ class AddonConfigManager:
         for key, val in self.items():
             if isinstance(val, bool):
                 yield key, val
+
+    def update(self, another):
+        if all(key in self._default_config for key in another):
+            return self._config.update(another)
+        else:
+            raise RuntimeError("Passed config with keys that aren't present in the default config.")
 
     def write_config(self):
         if self.is_default:
