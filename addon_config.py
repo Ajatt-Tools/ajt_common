@@ -60,19 +60,23 @@ class AddonConfigManager:
         except KeyError:
             return default
 
-    def items(self):
-        for key in self._default_config:
-            yield key, self[key]
-
-    def toggleables(self) -> Iterable[tuple[str, Any]]:
-        for key, val in self.items():
-            if isinstance(val, bool):
-                yield key, val
+    @classmethod
+    def keys(cls):
+        return cls._default_config.keys()
 
     @classmethod
     def bool_keys(cls) -> Iterable[str]:
-        """Returns an iterable of boolean keys in the config."""
+        """Returns an iterable of boolean (toggleable) parameters in the config."""
         return (key for key, value in cls._default_config.items() if isinstance(value, bool))
+
+    def items(self) -> Iterable[tuple[str, Any]]:
+        for key in self.keys():
+            yield key, self[key]
+
+    def toggleables(self) -> Iterable[tuple[str, bool]]:
+        """Return all toggleable keys and values in the config."""
+        for key in self.bool_keys():
+            yield key, self[key]
 
     def update(self, another):
         if all(key in self._default_config for key in another):
