@@ -37,18 +37,15 @@ class AddonConfigManager:
     def is_default(self) -> bool:
         return self._default_config is self._config
 
-    def _get(self, key: str):
+    def __getitem__(self, key: str):
         if key in self._default_config:
             return self._config.get(key, self._default_config[key])
         else:
             raise KeyError(f"Key '{key}' is not defined in the default config.")
 
-    def __getitem__(self, key: str):
-        return self._get(key)
-
     def __setitem__(self, key, value):
         try:
-            self._get(key)
+            self[key]
         except KeyError:
             raise
         else:
@@ -56,7 +53,7 @@ class AddonConfigManager:
 
     def get(self, key, default=None):
         try:
-            return self._get(key)
+            return self[key]
         except KeyError:
             return default
 
