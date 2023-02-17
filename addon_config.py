@@ -57,14 +57,12 @@ class AddonConfigManager:
         except KeyError:
             return default
 
-    @classmethod
-    def keys(cls):
-        return cls._default_config.keys()
+    def keys(self):
+        return self._default_config.keys()
 
-    @classmethod
-    def bool_keys(cls) -> Iterable[str]:
+    def bool_keys(self) -> Iterable[str]:
         """Returns an iterable of boolean (toggleable) parameters in the config."""
-        return (key for key, value in cls._default_config.items() if isinstance(value, bool))
+        return (key for key, value in self._default_config.items() if isinstance(value, bool))
 
     def items(self) -> Iterable[tuple[str, Any]]:
         for key in self.keys():
