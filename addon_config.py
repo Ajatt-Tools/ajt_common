@@ -73,13 +73,20 @@ class AddonConfigManager:
         for key in self.bool_keys():
             yield key, self[key]
 
-    def update(self, another):
-        if all(key in self._default_config for key in another):
-            return self._config.update(another)
-        else:
-            raise RuntimeError("Passed config with keys that aren't present in the default config.")
+    def update(self, another: dict[str, Any], clear_old: bool = False) -> None:
+        self._raise_if_redundant_keys(another)
+        if clear_old:
+            self._config.clear()
+        self._config.update(another)
 
     def write_config(self):
         if self.is_default:
             raise RuntimeError("Can't write default config.")
         return write_config(self._config)
+
+    def _raise_if_redundant_keys(self, new_config: dict):
+        if redundant_keys := [key for key in new_config if key not in self._default_config]:
+            raise RuntimeError(
+                "Passed a new config with keys that aren't present in the default config: %s."
+                % ", ".join(redundant_keys)
+            )
