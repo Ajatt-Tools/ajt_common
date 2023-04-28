@@ -115,6 +115,9 @@ class CheckableComboBox(QComboBox):
     def checkedItems(self) -> Iterable[QStandardItem]:
         return filter(lambda item: item.checkState() == Qt.CheckState.Checked, self.items())
 
+    def checkedData(self) -> Iterable[Any]:
+        return map(QStandardItem.data, self.checkedItems())
+
     def checkedTexts(self) -> Iterable[str]:
         return map(QStandardItem.text, self.checkedItems())
 
