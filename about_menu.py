@@ -33,7 +33,7 @@ class AboutDialog(QDialog):
     def __init__(self, parent: QWidget, *args, **kwargs):
         super().__init__(parent=parent or mw, *args, **kwargs)
         tweak_window(self)
-        self.setWindowModality(Qt.ApplicationModal)
+        self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.setWindowTitle(f'{DIALOG_NAME} {ADDON_SERIES}')
         self.setSizePolicy(self.make_size_policy())
         self.setMinimumSize(320, 240)
@@ -85,7 +85,7 @@ class AboutDialog(QDialog):
         return root_layout
 
     def make_size_policy(self) -> QSizePolicy:
-        size_policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        size_policy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
         size_policy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
