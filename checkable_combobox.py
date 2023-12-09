@@ -54,7 +54,7 @@ class CheckableComboBox(QComboBox):
             else Qt.CheckState.Checked
         )
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event: QResizeEvent):
         """ Recompute text to elide as needed """
         self.updateText()
         super().resizeEvent(event)
