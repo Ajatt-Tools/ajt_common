@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from collections.abc import Iterable
-from typing import Callable, Any
+from typing import Callable, Any, cast
 
 import aqt
 from aqt import mw
@@ -101,7 +101,9 @@ class AddonConfigManager:
             # Config has been already written to disk by aqt.addons.ConfigEditor
             self.update(new_conf, clear_old=True)
         except RuntimeError as ex:
-            showCritical(str(ex), parent=mw, help=None)  # type: ignore
+            from aqt.utils import showCritical
+
+            showCritical(str(ex), parent=mw, help=cast(str, None))
             # Restore previous config.
             self.write_config()
 
