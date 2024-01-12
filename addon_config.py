@@ -1,13 +1,14 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
-from typing import Callable, Any
 from collections.abc import Iterable
+from typing import Callable, Any
 
+import aqt
 from aqt import mw
 
 
-def get_default_config():
+def get_default_config() -> dict:
     manager = mw.addonManager
     addon = manager.addonFromModule(__name__)
     return manager.addonConfigDefaults(addon)
@@ -23,6 +24,17 @@ def write_config(config: dict):
 
 def set_config_action(fn: Callable):
     return mw.addonManager.setConfigAction(__name__, fn)
+
+
+def set_config_update_action(fn: Callable):
+    return mw.addonManager.setConfigUpdatedAction(__name__, fn)
+
+
+class MgrPropMixIn:
+    @property
+    def mgr(self) -> aqt.addons.AddonManager:
+        """Anki's ConfigEditor requires this property."""
+        return mw.addonManager
 
 
 class AddonConfigManager:
@@ -79,6 +91,24 @@ class AddonConfigManager:
         if clear_old:
             self._config.clear()
         self._config.update(another)
+
+    def update_from_addon_manager(self, new_conf: dict):
+        """
+        This method may be passed to mw.addonManager.setConfigUpdatedAction
+        to update our copy of the config dictionary after the user finishes editing it.
+        """
+        try:
+            # Config has been already written to disk by aqt.addons.ConfigEditor
+            self.update(new_conf, clear_old=True)
+        except RuntimeError as ex:
+            showCritical(str(ex), parent=mw, help=None)  # type: ignore
+            # Restore previous config.
+            self.write_config()
+
+    def dict_copy(self) -> dict:
+        """Get a deep copy of the config dictionary."""
+        import copy
+        return copy.deepcopy(self._config)
 
     def write_config(self):
         if self.is_default:
