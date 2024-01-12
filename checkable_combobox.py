@@ -5,8 +5,8 @@
 # https://gis.stackexchange.com/questions/350148/qcombobox-multiple-selection-pyqt5
 # https://www.geeksforgeeks.org/pyqt5-checkable-combobox-showing-checked-items-in-textview/
 
-from typing import Any
 from collections.abc import Iterable, Collection
+from typing import Any
 
 from aqt.qt import *
 
@@ -117,7 +117,10 @@ class CheckableComboBox(QComboBox):
         return filter(lambda item: item.checkState() == Qt.CheckState.Checked, self.items())
 
     def checkedData(self) -> Iterable[Any]:
-        return map(QStandardItem.data, self.checkedItems())
+        return map(
+            QStandardItem.data,
+            self.checkedItems()  # type: ignore
+        )
 
     def checkedTexts(self) -> Iterable[str]:
         return map(QStandardItem.text, self.checkedItems())
@@ -156,8 +159,8 @@ class MainWindowTest(QMainWindow):
         self.setCentralWidget(widget)
         combo_box = CheckableComboBox()
         print_button = QPushButton('Print Values')
-        main_layout.addWidget(combo_box)  # type: ignore
-        main_layout.addWidget(print_button)  # type: ignore
+        main_layout.addWidget(combo_box)
+        main_layout.addWidget(print_button)
         combo_box.setCheckableTexts(self.items)
         combo_box.setCheckedTexts(self.items[3:6])
         qconnect(print_button.clicked, lambda: print('\n'.join(combo_box.checkedTexts())))

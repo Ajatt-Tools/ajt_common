@@ -48,7 +48,7 @@ def to_int(modifiers) -> int:
 
 
 class KeyPressDialog(QDialog):
-    value_accepted = pyqtSignal(str)  # type: ignore
+    value_accepted = pyqtSignal(str)
 
     def __init__(self, parent: QWidget = None, initial_value: str = None, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -118,7 +118,7 @@ def detect_keypress():
     w = QDialog()
     w.setWindowTitle("Test")
     w.setLayout(layout := QVBoxLayout())
-    layout.addWidget(b := ShortCutGrabButton())  # type: ignore
+    layout.addWidget(b := ShortCutGrabButton())
     w.show()
     code = app.exec()
     print(f"{'Accepted' if w.result() else 'Rejected'}. Code: {code}, shortcut: \"{b.value()}\"")

@@ -9,7 +9,7 @@ class MonoSpaceLineEdit(QLineEdit):
     min_height = 32
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)  # type: ignore
+        super().__init__(*args, **kwargs)
         font = self.font()
         font.setFamilies((
             "Noto Mono", "Noto Sans Mono", "DejaVu Sans Mono", "Droid Sans Mono",

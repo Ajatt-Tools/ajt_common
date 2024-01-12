@@ -1,8 +1,8 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
-from typing import Optional
 from collections.abc import Iterable
+from typing import Optional
 
 from aqt.qt import *
 
@@ -11,7 +11,7 @@ from .checkable_combobox import CheckableComboBox
 
 class MultipleChoiceSelector(QGroupBox):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)  # type: ignore
+        super().__init__(*args, **kwargs)
         self._combo = CheckableComboBox()
         self.setTitle("Limit to fields")
         self.setCheckable(True)
