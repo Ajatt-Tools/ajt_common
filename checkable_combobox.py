@@ -46,7 +46,7 @@ class CheckableComboBox(QComboBox):
         self.view().viewport().installEventFilter(self)
 
     def handle_item_pressed(self, index):
-        """ Check the pressed item if unchecked and vice-versa """
+        """Check the pressed item if unchecked and vice-versa"""
         item: QStandardItem = self.model().itemFromIndex(index)
         item.setCheckState(
             Qt.CheckState.Unchecked
@@ -55,7 +55,7 @@ class CheckableComboBox(QComboBox):
         )
 
     def resizeEvent(self, event: QResizeEvent):
-        """ Recompute text to elide as needed """
+        """Recompute text to elide as needed"""
         self.updateText()
         super().resizeEvent(event)
 
@@ -72,7 +72,7 @@ class CheckableComboBox(QComboBox):
         return self.hidePopup() if self._opened else self.showPopup()
 
     def showPopup(self):
-        """ When the popup is displayed, a click on the lineedit should close it """
+        """When the popup is displayed, a click on the lineedit should close it"""
         super().showPopup()
         self._opened = True
 
@@ -85,7 +85,7 @@ class CheckableComboBox(QComboBox):
         self.updateText()
 
     def timerEvent(self, event):
-        """ After timeout, kill timer, and re-enable click on line-edit """
+        """After timeout, kill timer, and re-enable click on line-edit"""
         self.killTimer(event.timerId())
         self._opened = False
 
@@ -114,24 +114,31 @@ class CheckableComboBox(QComboBox):
         return (self.model().item(i) for i in range(self.model().rowCount()))
 
     def checkedItems(self) -> Iterable[QStandardItem]:
-        return filter(lambda item: item.checkState() == Qt.CheckState.Checked, self.items())
+        return filter(
+            lambda item: item.checkState() == Qt.CheckState.Checked, self.items()
+        )
 
     def checkedData(self) -> Iterable[Any]:
-        return map(
-            QStandardItem.data,
-            self.checkedItems()  # type: ignore
-        )
+        return map(QStandardItem.data, self.checkedItems())  # type: ignore
 
     def checkedTexts(self) -> Iterable[str]:
         return map(QStandardItem.text, self.checkedItems())
 
     def setCheckedTexts(self, texts: Collection[str]):
         for item in self.items():
-            item.setCheckState(Qt.CheckState.Checked if (item.text() in texts) else Qt.CheckState.Unchecked)
+            item.setCheckState(
+                Qt.CheckState.Checked
+                if (item.text() in texts)
+                else Qt.CheckState.Unchecked
+            )
 
     def setCheckedData(self, data_items: Collection[Any]):
         for item in self.items():
-            item.setCheckState(Qt.CheckState.Checked if (item.data() in data_items) else Qt.CheckState.Unchecked)
+            item.setCheckState(
+                Qt.CheckState.Checked
+                if (item.data() in data_items)
+                else Qt.CheckState.Unchecked
+            )
 
 
 class MainWindowTest(QMainWindow):
@@ -158,12 +165,14 @@ class MainWindowTest(QMainWindow):
         widget.setLayout(main_layout)
         self.setCentralWidget(widget)
         combo_box = CheckableComboBox()
-        print_button = QPushButton('Print Values')
+        print_button = QPushButton("Print Values")
         main_layout.addWidget(combo_box)
         main_layout.addWidget(print_button)
         combo_box.setCheckableTexts(self.items)
         combo_box.setCheckedTexts(self.items[3:6])
-        qconnect(print_button.clicked, lambda: print('\n'.join(combo_box.checkedTexts())))
+        qconnect(
+            print_button.clicked, lambda: print("\n".join(combo_box.checkedTexts()))
+        )
 
 
 def main():
@@ -174,5 +183,5 @@ def main():
     app.exit(app.exec())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

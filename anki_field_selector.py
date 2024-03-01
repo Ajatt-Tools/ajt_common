@@ -9,8 +9,8 @@ from aqt.qt import *
 
 def gather_all_field_names() -> Iterable[str]:
     for model in mw.col.models.all_names_and_ids():
-        for field in mw.col.models.get(model.id)['flds']:
-            yield field['name']
+        for field in mw.col.models.get(model.id)["flds"]:
+            yield field["name"]
 
 
 class AnkiFieldSelector(QComboBox):

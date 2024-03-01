@@ -39,6 +39,7 @@ class MgrPropMixIn:
 
 class AddonConfigManager:
     """Dict-like proxy class for managing addon's config."""
+
     _default_config = get_default_config()
     _config = get_config()
 
@@ -75,7 +76,11 @@ class AddonConfigManager:
 
     def bool_keys(self) -> Iterable[str]:
         """Returns an iterable of boolean (toggleable) parameters in the config."""
-        return (key for key, value in self._default_config.items() if isinstance(value, bool))
+        return (
+            key
+            for key, value in self._default_config.items()
+            if isinstance(value, bool)
+        )
 
     def items(self) -> Iterable[tuple[str, Any]]:
         for key in self.keys():
@@ -110,6 +115,7 @@ class AddonConfigManager:
     def dict_copy(self) -> dict:
         """Get a deep copy of the config dictionary."""
         import copy
+
         return copy.deepcopy(self._config)
 
     def write_config(self):
@@ -118,7 +124,9 @@ class AddonConfigManager:
         return write_config(self._config)
 
     def _raise_if_redundant_keys(self, new_config: dict):
-        if redundant_keys := [key for key in new_config if key not in self._default_config]:
+        if redundant_keys := [
+            key for key in new_config if key not in self._default_config
+        ]:
             raise RuntimeError(
                 "Passed a new config with keys that aren't present in the default config: %s."
                 % ", ".join(redundant_keys)

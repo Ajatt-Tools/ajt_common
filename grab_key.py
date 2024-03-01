@@ -7,20 +7,15 @@ from aqt.qt import *
 
 
 def mod_mask_qt5():
-    return (
-            Qt.Modifier.CTRL |
-            Qt.Modifier.ALT |
-            Qt.Modifier.SHIFT |
-            Qt.Modifier.META
-    )
+    return Qt.Modifier.CTRL | Qt.Modifier.ALT | Qt.Modifier.SHIFT | Qt.Modifier.META
 
 
 def mod_mask_qt6():
     return (
-            Qt.KeyboardModifier.ControlModifier |
-            Qt.KeyboardModifier.AltModifier |
-            Qt.KeyboardModifier.ShiftModifier |
-            Qt.KeyboardModifier.MetaModifier
+        Qt.KeyboardModifier.ControlModifier
+        | Qt.KeyboardModifier.AltModifier
+        | Qt.KeyboardModifier.ShiftModifier
+        | Qt.KeyboardModifier.MetaModifier
     )
 
 
@@ -50,7 +45,9 @@ def to_int(modifiers) -> int:
 class KeyPressDialog(QDialog):
     value_accepted = pyqtSignal(str)
 
-    def __init__(self, parent: QWidget = None, initial_value: str = None, *args, **kwargs):
+    def __init__(
+        self, parent: QWidget = None, initial_value: str = None, *args, **kwargs
+    ):
         super().__init__(parent, *args, **kwargs)
         self._shortcut = initial_value
         self.setMinimumSize(380, 64)
@@ -85,11 +82,10 @@ class KeyPressDialog(QDialog):
         if key == Qt.Key.Key_Escape:
             self._accept_value(None)
         elif (
-                modifiers
-                and modifiers_allowed(modifiers)
-                and key > 0
-                and key not in forbidden_keys()
-
+            modifiers
+            and modifiers_allowed(modifiers)
+            and key > 0
+            and key not in forbidden_keys()
         ):
             self._accept_value(QKeySequence(to_int(modifiers) + key).toString())
 
@@ -98,13 +94,16 @@ class KeyPressDialog(QDialog):
 
 
 class ShortCutGrabButton(QPushButton):
-    _placeholder = '[Not assigned]'
+    _placeholder = "[Not assigned]"
 
     def __init__(self, initial_value: str = None):
         super().__init__(initial_value or self._placeholder)
         self._dialog = KeyPressDialog(self, initial_value)
         qconnect(self.clicked, self._dialog.exec)
-        qconnect(self._dialog.value_accepted, lambda value: self.setText(value or self._placeholder))
+        qconnect(
+            self._dialog.value_accepted,
+            lambda value: self.setText(value or self._placeholder),
+        )
 
     def setValue(self, value: str):
         self._dialog.set_value(value)
@@ -121,9 +120,11 @@ def detect_keypress():
     layout.addWidget(b := ShortCutGrabButton())
     w.show()
     code = app.exec()
-    print(f"{'Accepted' if w.result() else 'Rejected'}. Code: {code}, shortcut: \"{b.value()}\"")
+    print(
+        f"{'Accepted' if w.result() else 'Rejected'}. Code: {code}, shortcut: \"{b.value()}\""
+    )
     sys.exit(code)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     detect_keypress()

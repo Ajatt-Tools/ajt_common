@@ -19,6 +19,7 @@ def garbage_collect_on_dialog_finish(dialog: QDialog):
 def disable_help_button(dialog: QDialog):
     try:
         from aqt.utils import disable_help_button as _disable_help_button
+
         _disable_help_button(dialog)
     except ImportError:
         pass
@@ -34,7 +35,7 @@ class AboutDialog(QDialog):
         super().__init__(parent=parent or mw, *args, **kwargs)
         tweak_window(self)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
-        self.setWindowTitle(f'{DIALOG_NAME} {ADDON_SERIES}')
+        self.setWindowTitle(f"{DIALOG_NAME} {ADDON_SERIES}")
         self.setSizePolicy(self.make_size_policy())
         self.setMinimumSize(320, 240)
         self.setLayout(self.make_root_layout())
@@ -49,13 +50,13 @@ class AboutDialog(QDialog):
 
     def make_button_box(self) -> QLayout:
         def ok():
-            but = QPushButton('Ok')
+            but = QPushButton("Ok")
             qconnect(but.clicked, self.accept)
             but.setFixedHeight(BUTTON_HEIGHT)
             return but
 
         def community():
-            but = QPushButton('Join our community')
+            but = QPushButton("Join our community")
             qconnect(but.clicked, lambda: openLink(COMMUNITY_LINK))
             but.setIcon(QIcon(CHAT_ICON_PATH))
             but.setIconSize(QSize(ICON_SIDE_LEN, ICON_SIDE_LEN))
@@ -63,7 +64,7 @@ class AboutDialog(QDialog):
             return but
 
         def donate():
-            but = QPushButton('Donate')
+            but = QPushButton("Donate")
             qconnect(but.clicked, lambda: openLink(DONATE_LINK))
             but.setIcon(QIcon(DONATE_ICON_PATH))
             but.setIconSize(QSize(ICON_SIDE_LEN, ICON_SIDE_LEN))
@@ -85,7 +86,9 @@ class AboutDialog(QDialog):
         return root_layout
 
     def make_size_policy(self) -> QSizePolicy:
-        size_policy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+        size_policy = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum
+        )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
         size_policy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
@@ -93,12 +96,12 @@ class AboutDialog(QDialog):
 
 
 def addon_folder_name() -> str:
-    return ''.join(__name__.split('.')[:1])
+    return "".join(__name__.split(".")[:1])
 
 
 def menu_root_entry() -> QMenu:
-    if not hasattr(mw.form, 'ajt_root_menu'):
-        mw.form.ajt_root_menu = QMenu(f'&{ADDON_SERIES}', mw)
+    if not hasattr(mw.form, "ajt_root_menu"):
+        mw.form.ajt_root_menu = QMenu(f"&{ADDON_SERIES}", mw)
         mw.form.menubar.insertMenu(mw.form.menuHelp.menuAction(), mw.form.ajt_root_menu)
         mw.form.ajt_root_menu.addAction(create_about_action(mw.form.ajt_root_menu))
         mw.form.ajt_root_menu.addSeparator()
@@ -111,6 +114,6 @@ def create_about_action(parent: QWidget) -> QAction:
         dialog = AboutDialog(mw)
         return dialog.exec()
 
-    action = QAction(f'{DIALOG_NAME}...', parent)
+    action = QAction(f"{DIALOG_NAME}...", parent)
     qconnect(action.triggered, open_about_dialog)
     return action

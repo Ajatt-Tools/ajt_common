@@ -3,7 +3,7 @@
 
 import re
 
-SOUND_TAG_REGEX = re.compile(r'\[sound:([^\[\]]+?\.[^\[\]]+?)]')
+SOUND_TAG_REGEX = re.compile(r"\[sound:([^\[\]]+?\.[^\[\]]+?)]")
 IMAGE_TAG_REGEX = re.compile(r'<img [^<>]*src="([^"<>\']+)"[^<>]*>')
 
 

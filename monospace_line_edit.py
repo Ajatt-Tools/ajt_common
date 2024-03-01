@@ -11,10 +11,20 @@ class MonoSpaceLineEdit(QLineEdit):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         font = self.font()
-        font.setFamilies((
-            "Noto Mono", "Noto Sans Mono", "DejaVu Sans Mono", "Droid Sans Mono",
-            "Liberation Mono", "Courier New", "Courier", "Lucida", "Monaco", "Monospace",
-        ))
+        font.setFamilies(
+            (
+                "Noto Mono",
+                "Noto Sans Mono",
+                "DejaVu Sans Mono",
+                "Droid Sans Mono",
+                "Liberation Mono",
+                "Courier New",
+                "Courier",
+                "Lucida",
+                "Monaco",
+                "Monospace",
+            )
+        )
         font.setPixelSize(self.font_size)
         self.setMinimumHeight(self.min_height)
         self.setFont(font)
