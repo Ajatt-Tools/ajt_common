@@ -10,7 +10,7 @@ readonly GREEN='\033[0;32m'
 readonly manifest=manifest.json
 
 declare package=unknown name=unknown target=ankiweb # command-line arguments
-declare branch zip_name
+declare zip_name
 
 check_tools_installed() {
 	for exe in git zip zipmerge; do
@@ -86,8 +86,7 @@ main() {
 	rm -v -- ./*.ankiaddon 2>/dev/null || true
 
 	read_cmd_args "$@"
-	readonly branch=$(git branch --show-current)
-	readonly zip_name=${package,,}_${branch}.ankiaddon
+	readonly zip_name=${package,,}.ankiaddon
 
 	echo "Archiving root repo"
 	git_archive
