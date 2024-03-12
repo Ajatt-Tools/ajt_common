@@ -45,9 +45,7 @@ def to_int(modifiers) -> int:
 class KeyPressDialog(QDialog):
     value_accepted = pyqtSignal(str)
 
-    def __init__(
-        self, parent: QWidget = None, initial_value: str = None, *args, **kwargs
-    ):
+    def __init__(self, parent: QWidget = None, initial_value: str = None, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self._shortcut = initial_value
         self.setMinimumSize(380, 64)
@@ -81,12 +79,7 @@ class KeyPressDialog(QDialog):
 
         if key == Qt.Key.Key_Escape:
             self._accept_value(None)
-        elif (
-            modifiers
-            and modifiers_allowed(modifiers)
-            and key > 0
-            and key not in forbidden_keys()
-        ):
+        elif modifiers and modifiers_allowed(modifiers) and key > 0 and key not in forbidden_keys():
             self._accept_value(QKeySequence(to_int(modifiers) + key).toString())
 
     def value(self) -> Optional[str]:
@@ -120,9 +113,7 @@ def detect_keypress():
     layout.addWidget(b := ShortCutGrabButton())
     w.show()
     code = app.exec()
-    print(
-        f"{'Accepted' if w.result() else 'Rejected'}. Code: {code}, shortcut: \"{b.value()}\""
-    )
+    print(f"{'Accepted' if w.result() else 'Rejected'}. Code: {code}, shortcut: \"{b.value()}\"")
     sys.exit(code)
 
 

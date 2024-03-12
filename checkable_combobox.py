@@ -49,9 +49,7 @@ class CheckableComboBox(QComboBox):
         """Check the pressed item if unchecked and vice-versa"""
         item: QStandardItem = self.model().itemFromIndex(index)
         item.setCheckState(
-            Qt.CheckState.Unchecked
-            if item.checkState() == Qt.CheckState.Checked
-            else Qt.CheckState.Checked
+            Qt.CheckState.Unchecked if item.checkState() == Qt.CheckState.Checked else Qt.CheckState.Checked
         )
 
     def resizeEvent(self, event: QResizeEvent):
@@ -114,9 +112,7 @@ class CheckableComboBox(QComboBox):
         return (self.model().item(i) for i in range(self.model().rowCount()))
 
     def checkedItems(self) -> Iterable[QStandardItem]:
-        return filter(
-            lambda item: item.checkState() == Qt.CheckState.Checked, self.items()
-        )
+        return filter(lambda item: item.checkState() == Qt.CheckState.Checked, self.items())
 
     def checkedData(self) -> Iterable[Any]:
         return map(QStandardItem.data, self.checkedItems())  # type: ignore
@@ -126,19 +122,11 @@ class CheckableComboBox(QComboBox):
 
     def setCheckedTexts(self, texts: Collection[str]):
         for item in self.items():
-            item.setCheckState(
-                Qt.CheckState.Checked
-                if (item.text() in texts)
-                else Qt.CheckState.Unchecked
-            )
+            item.setCheckState(Qt.CheckState.Checked if (item.text() in texts) else Qt.CheckState.Unchecked)
 
     def setCheckedData(self, data_items: Collection[Any]):
         for item in self.items():
-            item.setCheckState(
-                Qt.CheckState.Checked
-                if (item.data() in data_items)
-                else Qt.CheckState.Unchecked
-            )
+            item.setCheckState(Qt.CheckState.Checked if (item.data() in data_items) else Qt.CheckState.Unchecked)
 
 
 class MainWindowTest(QMainWindow):
@@ -170,9 +158,7 @@ class MainWindowTest(QMainWindow):
         main_layout.addWidget(print_button)
         combo_box.setCheckableTexts(self.items)
         combo_box.setCheckedTexts(self.items[3:6])
-        qconnect(
-            print_button.clicked, lambda: print("\n".join(combo_box.checkedTexts()))
-        )
+        qconnect(print_button.clicked, lambda: print("\n".join(combo_box.checkedTexts())))
 
 
 def main():

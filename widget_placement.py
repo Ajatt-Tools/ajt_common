@@ -13,9 +13,7 @@ class GridWidgetPosition(NamedTuple):
     col: int
 
 
-def widgets_to_grid_items(
-    widgets: Iterable[QWidget], n_columns: int = 2
-) -> Iterable[GridWidgetPosition]:
+def widgets_to_grid_items(widgets: Iterable[QWidget], n_columns: int = 2) -> Iterable[GridWidgetPosition]:
     row = col = 1
     for widget in widgets:
         yield GridWidgetPosition(widget, row, col)
@@ -29,8 +27,7 @@ def widgets_to_grid_items(
 def place_widgets_in_grid(
     widgets: Iterable[QWidget],
     n_columns: int = 2,
-    alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignLeft
-    | Qt.AlignmentFlag.AlignTop,
+    alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
 ) -> QGridLayout:
     grid = QGridLayout()
     grid.setAlignment(alignment)
