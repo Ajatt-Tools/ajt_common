@@ -55,15 +55,15 @@ read_cmd_args() {
 	while (($# > 0)); do
 		case $1 in
 		--name)
-			readonly name=$2
+			name=$2
 			shift
 			;;
 		--package)
-			readonly package=$2
+			package=$2
 			shift
 			;;
 		--target)
-			readonly target=$2 # ankiweb or github
+			target=$2 # ankiweb or github
 			shift
 			;;
 		"")
@@ -76,6 +76,7 @@ read_cmd_args() {
 		esac
 		shift
 	done
+	readonly package name target
 }
 
 main() {
