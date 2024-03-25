@@ -2,7 +2,13 @@
 
 echo "Formatting $PWD"
 
-readarray -t FILES <<<"$(git ls-files | grep -P '\.py$')"
+# Pass a list of files or take all files in the repository.
+
+if [[ $# -gt 0 ]]; then
+	FILES=("$@")
+else
+	readarray -t FILES <<<"$(git ls-files | grep -P '\.py$')"
+fi
 readonly -a FILES
 
 pyupgrade \
