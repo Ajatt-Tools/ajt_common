@@ -29,7 +29,7 @@ HARDCODED_PATHS = (
     "/opt/homebrew/bin",
     "/usr/local/bin",
     "/bin",
-    os.path.join(os.getenv("HOME", "/home/user"), ".local", ".bin"),
+    os.path.join(os.getenv("HOME", "/home/user"), ".local", "bin"),
 )
 
 
