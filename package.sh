@@ -66,6 +66,11 @@ read_cmd_args() {
 			target=$2 # ankiweb or github
 			shift
 			;;
+		--zip_name)
+			zip_name=$2 # usually *.ankiaddon
+			echo "explicitly set zip name to $zip_name"
+			shift
+			;;
 		"")
 			break
 			;;
@@ -77,6 +82,7 @@ read_cmd_args() {
 		shift
 	done
 	readonly package name target
+	readonly zip_name=${zip_name:-${package,,}.ankiaddon}
 }
 
 main() {
@@ -86,7 +92,6 @@ main() {
 	rm -v -- ./*.ankiaddon 2>/dev/null || true
 
 	read_cmd_args "$@"
-	readonly zip_name=${package,,}.ankiaddon
 
 	echo "Archiving root repo"
 	git_archive
