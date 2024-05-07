@@ -9,7 +9,13 @@ readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly manifest=manifest.json
 
-declare package=unknown name=unknown target=ankiweb # command-line arguments
+# command-line arguments
+declare \
+	package=unknown \
+	name=unknown \
+	target=ankiweb \
+	addon_root=""
+
 declare zip_name
 
 check_tools_installed() {
@@ -22,15 +28,20 @@ check_tools_installed() {
 }
 
 check_correct_cwd() {
-	if ! [[ -d $PWD/.git ]] || ! [[ -d $PWD/ajt_common ]]; then
+	if ! [[ -d $PWD/.git ]] || ! [[ -d $PWD/ajt_common || -d $PWD/addon/ajt_common ]]; then
 		echo -e "${RED}Started in a wrong directory:${NC} $PWD"
 		exit 1
 	fi
 }
 
 git_archive() {
+	if [[ -n $addon_root ]]; then
+		local -r ref=HEAD:$addon_root
+	else
+		local -r ref=HEAD
+	fi
 	run_archive() {
-		git archive HEAD --format=zip --output "$zip_name" "$@"
+		git archive "$ref" --format=zip --output "$zip_name" "$@"
 	}
 	echo "Target $target"
 	if [[ $target != ankiweb && $target != aw ]]; then
@@ -68,7 +79,12 @@ read_cmd_args() {
 			;;
 		--zip_name)
 			zip_name=$2 # usually *.ankiaddon
-			echo "explicitly set zip name to $zip_name"
+			echo "explicitly set zip name to '$zip_name'"
+			shift
+			;;
+		--root)
+			addon_root=$2 # usually *.ankiaddon
+			echo "explicitly set root dir to '$addon_root'"
 			shift
 			;;
 		"")
@@ -81,7 +97,7 @@ read_cmd_args() {
 		esac
 		shift
 	done
-	readonly package name target
+	readonly package name target addon_root
 	readonly zip_name=${zip_name:-${package,,}.ankiaddon}
 }
 
@@ -98,7 +114,12 @@ main() {
 
 	echo "Archiving submodules"
 	# shellcheck disable=SC2016
-	root_dir=$PWD git submodule foreach 'git archive HEAD --prefix="${sm_path}/" --format=zip --output "${root_dir:?}/${sm_path}_${sha1}.zip"'
+	ROOT_DIR=$PWD \
+		ADDON_ROOT=$addon_root \
+		git submodule foreach \
+		'PREFIX=${sm_path#$ADDON_ROOT/};
+		 echo "Prefix $PREFIX";
+		 git archive HEAD --prefix="${PREFIX:?}/" --format=zip --output "${ROOT_DIR:?}/${PREFIX}_${sha1}.zip"'
 
 	zipmerge ./"$zip_name" ./*.zip
 	rm -v -- ./*.zip ./"$manifest" 2>/dev/null || true
