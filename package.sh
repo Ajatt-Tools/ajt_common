@@ -28,7 +28,7 @@ check_tools_installed() {
 }
 
 check_correct_cwd() {
-	if ! [[ -d $PWD/.git ]] || ! [[ -d $PWD/ajt_common || -d $PWD/addon/ajt_common ]]; then
+	if ! [[ -d $PWD/.git ]] || ! [[ -d $PWD/ajt_common || -d $PWD/$addon_root/ajt_common ]]; then
 		echo -e "${RED}Started in a wrong directory:${NC} $PWD"
 		exit 1
 	fi
@@ -103,11 +103,11 @@ read_cmd_args() {
 
 main() {
 	check_tools_installed
-	check_correct_cwd
 
 	rm -v -- ./*.ankiaddon 2>/dev/null || true
 
 	read_cmd_args "$@"
+	check_correct_cwd
 
 	echo "Archiving root repo"
 	git_archive
