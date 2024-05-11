@@ -40,8 +40,8 @@ class MgrPropMixIn:
 class AddonConfigManager:
     """Dict-like proxy class for managing addon's config."""
 
-    _default_config = get_default_config()
-    _config = get_config()
+    _default_config: dict = get_default_config()
+    _config: dict = get_config()
 
     def __init__(self, default: bool = False):
         if default:
@@ -125,3 +125,25 @@ class AddonConfigManager:
                 "Passed a new config with keys that aren't present in the default config: %s."
                 % ", ".join(redundant_keys)
             )
+
+
+class ConfigSubViewBase(AddonConfigManager):
+    """
+    Class for viewing into nested dictionaries.
+    """
+    _view_key: str | None = None
+    _config: dict
+    _default_config: dict
+
+    def __init__(self, default: bool = False, view_key: str | None = None) -> None:
+        super().__init__(default)
+        self._view_key = view_key or self._view_key
+        if not self._view_key:
+            raise ValueError("view key must be set.")
+        self._config = self._config[self._view_key]
+        self._default_config = self._default_config[self._view_key]
+        assert isinstance(self._config, dict)
+        assert isinstance(self._default_config, dict)
+
+    def write_config(self) -> None:
+        raise RuntimeError("Can't call this function from a sub-view.")
