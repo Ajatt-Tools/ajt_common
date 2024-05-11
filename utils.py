@@ -3,8 +3,8 @@
 
 import functools
 import os
-from typing import Optional
 from collections.abc import Iterable
+from typing import Optional
 
 
 def ui_translate(key: str) -> str:
