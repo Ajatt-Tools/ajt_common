@@ -1,2 +1,14 @@
 .idea
+.vscode
 __pycache__
+.mypy_cache
+*.pickle
+*.db
+*.sqlite
+*.sqlite3
+meta.json
+manifest.json
+*.ankiaddon
+*TODO*
+__about__.py
+dist
