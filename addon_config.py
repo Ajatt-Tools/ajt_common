@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from collections.abc import Iterable
-from typing import Callable, Any, cast
+from typing import Callable, Any, cast, Optional
 
 import aqt
 from aqt import mw
@@ -131,11 +131,12 @@ class ConfigSubViewBase(AddonConfigManager):
     """
     Class for viewing into nested dictionaries.
     """
-    _view_key: str | None = None
+
+    _view_key: Optional[str] = None
     _config: dict
     _default_config: dict
 
-    def __init__(self, default: bool = False, view_key: str | None = None) -> None:
+    def __init__(self, default: bool = False, view_key: Optional[str] = None) -> None:
         super().__init__(default)
         self._view_key = view_key or self._view_key
         if not self._view_key:
