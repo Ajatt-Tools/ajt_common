@@ -9,9 +9,7 @@ from aqt import mw
 
 
 def get_default_config() -> dict:
-    manager = mw.addonManager
-    addon = manager.addonFromModule(__name__)
-    return manager.addonConfigDefaults(addon)
+    return mw.addonManager.addonConfigDefaults(mw.addonManager.addonFromModule(__name__))
 
 
 def get_config() -> dict:
