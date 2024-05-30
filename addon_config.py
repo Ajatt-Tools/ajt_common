@@ -1,6 +1,6 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
-
+import abc
 from collections.abc import Iterable
 from typing import Callable, Any, cast, Optional
 
@@ -39,6 +39,18 @@ class MgrPropMixIn:
         """Anki's ConfigEditor requires this property."""
         assert mw
         return mw.addonManager
+
+
+class AddonConfigAbc(abc.ABC):
+    @property
+    @abc.abstractmethod
+    def _config(self) -> dict:
+        raise NotImplementedError()
+
+    @property
+    @abc.abstractmethod
+    def _default_config(self) -> dict:
+        raise NotImplementedError()
 
 
 class AddonConfigManager:
