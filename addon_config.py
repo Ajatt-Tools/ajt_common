@@ -32,6 +32,7 @@ class MgrPropMixIn:
     @property
     def mgr(self) -> aqt.addons.AddonManager:
         """Anki's ConfigEditor requires this property."""
+        assert mw
         return mw.addonManager
 
 
