@@ -37,7 +37,10 @@ class MgrPropMixIn:
 
 
 class AddonConfigManager:
-    """Dict-like proxy class for managing addon's config."""
+    """
+    Dict-like proxy class for managing addon's config.
+    Normally this class is initialized once and is used as a global variable.
+    """
 
     _default_config: dict = get_default_config()
     _config: dict = get_config()
