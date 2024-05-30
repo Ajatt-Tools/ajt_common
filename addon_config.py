@@ -45,48 +45,30 @@ class MgrPropMixIn:
         return mw.addonManager
 
 
-class AddonConfigAbc(abc.ABC):
+class AddonConfigABC(abc.ABC):
     @property
     @abc.abstractmethod
-    def _config(self) -> dict:
+    def config(self) -> dict:
         raise NotImplementedError()
 
     @property
     @abc.abstractmethod
-    def _default_config(self) -> dict:
+    def default_config(self) -> dict:
         raise NotImplementedError()
-
-
-class AddonConfigManager:
-    """
-    Dict-like proxy class for managing addon's config.
-    Normally this class is initialized once and is used as a global variable.
-    """
-
-    _default_config: dict = get_default_config()
-    _config: dict = get_config()
-
-    def __init__(self, default: bool = False):
-        if default:
-            self._config = self._default_config
-
-    @property
-    def is_default(self) -> bool:
-        return self._default_config is self._config
 
     def __getitem__(self, key: str):
-        if key in self._default_config:
-            return self._config.get(key, self._default_config[key])
+        if key in self.default_config:
+            return self.config.get(key, self.default_config[key])
         else:
             raise KeyError(f"Key '{key}' is not defined in the default config.")
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value) -> None:
         try:
             self[key]
         except KeyError:
             raise
         else:
-            self._config[key] = value
+            self.config[key] = value
 
     def get(self, key, default=None):
         try:
@@ -94,12 +76,12 @@ class AddonConfigManager:
         except KeyError:
             return default
 
-    def keys(self):
-        return self._default_config.keys()
+    def keys(self) -> Iterable[str]:
+        return self.default_config.keys()
 
     def bool_keys(self) -> Iterable[str]:
         """Returns an iterable of boolean (toggleable) parameters in the config."""
-        return (key for key, value in self._default_config.items() if isinstance(value, bool))
+        return (key for key, value in self.default_config.items() if isinstance(value, bool))
 
     def items(self) -> Iterable[tuple[str, Any]]:
         for key in self.keys():
@@ -113,8 +95,46 @@ class AddonConfigManager:
     def update(self, another: dict[str, Any], clear_old: bool = False) -> None:
         self._raise_if_redundant_keys(another)
         if clear_old:
-            self._config.clear()
-        self._config.update(another)
+            self.config.clear()
+        self.config.update(another)
+
+    def _raise_if_redundant_keys(self, new_config: dict):
+        if redundant_keys := [key for key in new_config if key not in self.default_config]:
+            raise RuntimeError(
+                "Passed a new config with keys that aren't present in the default config: %s."
+                % ", ".join(redundant_keys)
+            )
+
+
+class AddonConfigManager(AddonConfigABC):
+    """
+    Dict-like proxy class for managing addon's config.
+    Normally this class is initialized once and is used as a global variable.
+    """
+
+    _default_config: dict
+    _config: dict
+
+    def __init__(self, default: bool = False):
+        self._default_config = get_default_config()
+        self._config = get_config()
+        if default:
+            self._config = self._default_config
+
+        assert isinstance(self.config, dict)
+        assert isinstance(self.default_config, dict)
+
+    @property
+    def is_default(self) -> bool:
+        return self.default_config is self.config
+
+    @property
+    def config(self) -> dict:
+        return self._config
+
+    @property
+    def default_config(self) -> dict:
+        return self._default_config
 
     def update_from_addon_manager(self, new_conf: dict):
         """
@@ -135,39 +155,39 @@ class AddonConfigManager:
         """Get a deep copy of the config dictionary."""
         import copy
 
-        return copy.deepcopy(self._config)
+        if self.is_default:
+            raise RuntimeError("Can't copy default config.")
+        return copy.deepcopy(self.config)
 
     def write_config(self):
         if self.is_default:
             raise RuntimeError("Can't write default config.")
-        return write_config(self._config)
-
-    def _raise_if_redundant_keys(self, new_config: dict):
-        if redundant_keys := [key for key in new_config if key not in self._default_config]:
-            raise RuntimeError(
-                "Passed a new config with keys that aren't present in the default config: %s."
-                % ", ".join(redundant_keys)
-            )
+        return write_config(self.config)
 
 
-class ConfigSubViewBase(AddonConfigManager):
+class ConfigSubViewBase(AddonConfigABC):
     """
     Class for viewing into nested dictionaries.
     """
 
-    _view_key: Optional[str] = None
-    _config: dict
-    _default_config: dict
+    _view_key: str
+    _manager: AddonConfigABC
 
-    def __init__(self, default: bool = False, view_key: Optional[str] = None) -> None:
-        super().__init__(default)
+    def __init__(self, manager: AddonConfigABC, view_key: Optional[str] = None) -> None:
         self._view_key = view_key or self._view_key
         if not self._view_key:
             raise ValueError("view key must be set.")
-        self._config = self._config[self._view_key]
-        self._default_config = self._default_config[self._view_key]
-        assert isinstance(self._config, dict)
-        assert isinstance(self._default_config, dict)
+        self._manager = manager
+        assert isinstance(self.config, dict)
+        assert isinstance(self.default_config, dict)
+
+    @property
+    def config(self) -> dict:
+        return self._manager.config[self._view_key]
+
+    @property
+    def default_config(self) -> dict:
+        return self._manager.default_config[self._view_key]
 
     def write_config(self) -> None:
         raise RuntimeError("Can't call this function from a sub-view.")
