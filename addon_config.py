@@ -10,12 +10,16 @@ from aqt import mw
 
 def get_default_config() -> dict:
     assert mw
-    return mw.addonManager.addonConfigDefaults(mw.addonManager.addonFromModule(__name__))
+    default_config = mw.addonManager.addonConfigDefaults(mw.addonManager.addonFromModule(__name__))
+    assert default_config
+    return default_config
 
 
 def get_config() -> dict:
     assert mw
-    return mw.addonManager.getConfig(__name__)
+    config = mw.addonManager.getConfig(__name__)
+    assert config
+    return config
 
 
 def write_config(config: dict):
