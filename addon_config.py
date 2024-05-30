@@ -9,22 +9,27 @@ from aqt import mw
 
 
 def get_default_config() -> dict:
+    assert mw
     return mw.addonManager.addonConfigDefaults(mw.addonManager.addonFromModule(__name__))
 
 
 def get_config() -> dict:
+    assert mw
     return mw.addonManager.getConfig(__name__)
 
 
 def write_config(config: dict):
+    assert mw
     return mw.addonManager.writeConfig(__name__, config)
 
 
 def set_config_action(fn: Callable):
+    assert mw
     return mw.addonManager.setConfigAction(__name__, fn)
 
 
 def set_config_update_action(fn: Callable):
+    assert mw
     return mw.addonManager.setConfigUpdatedAction(__name__, fn)
 
 
