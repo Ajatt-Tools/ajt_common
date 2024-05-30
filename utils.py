@@ -3,6 +3,7 @@
 
 import functools
 import os
+import shutil
 from collections.abc import Iterable
 from typing import Optional
 
@@ -48,11 +49,11 @@ def find_executable(name: str) -> Optional[str]:
     If possible, use the executable installed in the system.
     Otherwise, try fallback paths.
     """
-    return find_executable_with_distutils(name) or find_executable_hardcoded(name)
+    return shutil.which(name) or find_executable_hardcoded(name)
 
 
 def main():
-    print("distutils", find_executable_with_distutils("anki"))
+    print("distutils", shutil.which("anki"))
     print("hardcoded", find_executable_hardcoded("anki"))
     print("all", find_executable("anki"))
 
