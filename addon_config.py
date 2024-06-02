@@ -115,7 +115,7 @@ class AddonConfigManager(AddonConfigABC):
     _default_config: dict
     _config: dict
 
-    def __init__(self, default: bool = False):
+    def __init__(self, default: bool = False) -> None:
         self._default_config = get_default_config()
         self._config = get_config()
         if default:
