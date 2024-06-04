@@ -22,17 +22,17 @@ def get_config() -> dict:
     return config
 
 
-def write_config(config: dict):
+def write_config(config: dict) -> None:
     assert mw
     return mw.addonManager.writeConfig(__name__, config)
 
 
-def set_config_action(fn: Callable):
+def set_config_action(fn: Callable) -> None:
     assert mw
     return mw.addonManager.setConfigAction(__name__, fn)
 
 
-def set_config_update_action(fn: Callable):
+def set_config_update_action(fn: Callable) -> None:
     assert mw
     return mw.addonManager.setConfigUpdatedAction(__name__, fn)
 
@@ -139,7 +139,7 @@ class AddonConfigManager(AddonConfigABC):
     def default_config(self) -> dict:
         return self._default_config
 
-    def update_from_addon_manager(self, new_conf: dict):
+    def update_from_addon_manager(self, new_conf: dict) -> None:
         """
         This method may be passed to mw.addonManager.setConfigUpdatedAction
         to update our copy of the config dictionary after the user finishes editing it.
