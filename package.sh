@@ -98,7 +98,9 @@ read_cmd_args() {
 		shift
 	done
 	readonly package name target addon_root
-	readonly zip_name=${zip_name:-${package,,}.ankiaddon}
+	zip_name=${zip_name:-${package,,}.ankiaddon}
+	zip_name=${zip_name// /_}
+	readonly zip_name
 }
 
 main() {
