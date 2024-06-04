@@ -116,13 +116,16 @@ class AddonConfigManager(AddonConfigABC):
     _config: dict
 
     def __init__(self, default: bool = False) -> None:
-        self._default_config = get_default_config()
-        self._config = get_config()
+        self._set_underlying_dicts()
         if default:
             self._config = self._default_config
 
         assert isinstance(self.config, dict)
         assert isinstance(self.default_config, dict)
+
+    def _set_underlying_dicts(self) -> None:
+        self._default_config = get_default_config()
+        self._config = get_config()
 
     @property
     def is_default(self) -> bool:
