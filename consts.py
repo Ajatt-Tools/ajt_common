@@ -5,7 +5,7 @@ import os
 
 ADDON_SERIES = "AJT"
 DIALOG_NAME = "About"
-ANKIWEB_LINK = "https://ankiweb.net/shared/byauthor/1425504015"
+ANKIWEB_LINK = "https://ankiweb.net/shared/by-author/1344485230"
 WEBSITE_LINK = "https://tatsumoto.neocities.org/"
 COMMUNITY_LINK = "https://tatsumoto.neocities.org/blog/join-our-community.html"
 DONATE_LINK = "https://tatsumoto.neocities.org/blog/donating-to-tatsumoto.html"
