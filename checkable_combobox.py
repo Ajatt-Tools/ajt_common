@@ -5,7 +5,7 @@
 # https://gis.stackexchange.com/questions/350148/qcombobox-multiple-selection-pyqt5
 # https://www.geeksforgeeks.org/pyqt5-checkable-combobox-showing-checked-items-in-textview/
 
-from collections.abc import Iterable, Collection
+from collections.abc import Collection, Iterable
 from typing import Any
 
 from aqt.qt import *

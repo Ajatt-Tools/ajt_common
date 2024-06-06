@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 import abc
 from collections.abc import Iterable
-from typing import Callable, Any, cast, Optional
+from typing import Any, Callable, Optional, cast
 
 import aqt
 from aqt import mw
