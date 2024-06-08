@@ -111,6 +111,7 @@ main() {
 	read_cmd_args "$@"
 	check_correct_cwd
 
+	echo "Packaging $name"
 	echo "Archiving root repo"
 	git_archive
 
