@@ -60,3 +60,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+def clamp(min_val: int, val: int, max_val: int) -> int:
+    return max(min_val, min(val, max_val))
