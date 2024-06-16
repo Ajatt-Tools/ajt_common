@@ -14,7 +14,7 @@ MISSING = object()
 
 
 class CheckableComboBox(QComboBox):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         # Initial state
@@ -45,19 +45,20 @@ class CheckableComboBox(QComboBox):
         # Prevent popup from closing when clicking on an item
         self.view().viewport().installEventFilter(self)
 
-    def handle_item_pressed(self, index):
+    def handle_item_pressed(self, index) -> None:
         """Check the pressed item if unchecked and vice-versa"""
         item: QStandardItem = self.model().itemFromIndex(index)
-        item.setCheckState(
-            Qt.CheckState.Unchecked if item.checkState() == Qt.CheckState.Checked else Qt.CheckState.Checked
-        )
+        if item.checkState() == Qt.CheckState.Checked:
+            # reverse checked state on click.
+            return item.setCheckState(Qt.CheckState.Unchecked)
+        return item.setCheckState(Qt.CheckState.Checked)
 
-    def resizeEvent(self, event: QResizeEvent):
+    def resizeEvent(self, event: QResizeEvent) -> None:
         """Recompute text to elide as needed"""
         self.updateText()
         super().resizeEvent(event)
 
-    def eventFilter(self, obj: QObject, event: QEvent):
+    def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         if event.type() == QEvent.Type.MouseButtonRelease:
             if obj == self.lineEdit():
                 self.togglePopup()
@@ -66,15 +67,15 @@ class CheckableComboBox(QComboBox):
                 return True
         return False
 
-    def togglePopup(self):
+    def togglePopup(self) -> None:
         return self.hidePopup() if self._opened else self.showPopup()
 
-    def showPopup(self):
+    def showPopup(self) -> None:
         """When the popup is displayed, a click on the lineedit should close it"""
         super().showPopup()
         self._opened = True
 
-    def hidePopup(self):
+    def hidePopup(self) -> None:
         super().hidePopup()
         self._opened = False
         # Used to prevent immediate reopening when clicking on the lineEdit
@@ -93,7 +94,7 @@ class CheckableComboBox(QComboBox):
     def addCheckableText(self, text: str):
         return self.addCheckableItem(text)
 
-    def addCheckableItem(self, text: str, data: Any = MISSING):
+    def addCheckableItem(self, text: str, data: Any = MISSING) -> None:
         item = QStandardItem()
         item.setText(text)
         item.setCheckable(True)
@@ -103,7 +104,7 @@ class CheckableComboBox(QComboBox):
             item.setData(data)
         self.model().appendRow(item)
 
-    def setCheckableTexts(self, texts: Iterable[str]):
+    def setCheckableTexts(self, texts: Iterable[str]) -> None:
         self.clear()
         for text in texts:
             self.addCheckableText(text)
