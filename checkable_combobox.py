@@ -1,14 +1,15 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 import enum
-# Implementations
-# https://gis.stackexchange.com/questions/350148/qcombobox-multiple-selection-pyqt5
-# https://www.geeksforgeeks.org/pyqt5-checkable-combobox-showing-checked-items-in-textview/
-
 from collections.abc import Iterable, Sequence
 from typing import Any
 
 from aqt.qt import *
+
+# Implementations
+# https://gis.stackexchange.com/questions/350148/qcombobox-multiple-selection-pyqt5
+# https://www.geeksforgeeks.org/pyqt5-checkable-combobox-showing-checked-items-in-textview/
+
 
 MISSING = object()
 
