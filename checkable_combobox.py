@@ -130,7 +130,7 @@ class CheckableComboBox(QComboBox):
             item.setCheckState(Qt.CheckState.Checked if (item.data() in data_items) else Qt.CheckState.Unchecked)
 
 
-class MainWindowTest(QMainWindow):
+class ChkComboTryWindow(QDialog):
     items = (
         "Milk",
         "Eggs",
@@ -149,10 +149,8 @@ class MainWindowTest(QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        widget = QWidget()
-        main_layout = QVBoxLayout()
-        widget.setLayout(main_layout)
-        self.setCentralWidget(widget)
+        self.setWindowTitle("Test playground")
+        self.setLayout(main_layout := QVBoxLayout())
         combo_box = CheckableComboBox()
         print_button = QPushButton("Print Values")
         main_layout.addWidget(combo_box)
@@ -164,7 +162,7 @@ class MainWindowTest(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindowTest()
+    window = ChkComboTryWindow()
     window.show()
     window.resize(480, 320)
     app.exit(app.exec())
