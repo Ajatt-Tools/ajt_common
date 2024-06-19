@@ -1,11 +1,11 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
-
+import enum
 # Implementations
 # https://gis.stackexchange.com/questions/350148/qcombobox-multiple-selection-pyqt5
 # https://www.geeksforgeeks.org/pyqt5-checkable-combobox-showing-checked-items-in-textview/
 
-from collections.abc import Collection, Iterable
+from collections.abc import Iterable, Sequence
 from typing import Any
 
 from aqt.qt import *
@@ -112,20 +112,20 @@ class CheckableComboBox(QComboBox):
     def items(self) -> Iterable[QStandardItem]:
         return (self.model().item(i) for i in range(self.model().rowCount()))
 
-    def checkedItems(self) -> Iterable[QStandardItem]:
-        return filter(lambda item: item.checkState() == Qt.CheckState.Checked, self.items())
+    def checkedItems(self) -> Sequence[QStandardItem]:
+        return tuple(item for item in self.items() if item.checkState() == Qt.CheckState.Checked)
 
-    def checkedData(self) -> Iterable[Any]:
-        return map(QStandardItem.data, self.checkedItems())  # type: ignore
+    def checkedData(self) -> Sequence[Any]:
+        return tuple(item.data() for item in self.checkedItems())
 
-    def checkedTexts(self) -> Iterable[str]:
-        return map(QStandardItem.text, self.checkedItems())
+    def checkedTexts(self) -> Sequence[str]:
+        return tuple(item.text() for item in self.checkedItems())
 
-    def setCheckedTexts(self, texts: Collection[str]):
+    def setCheckedTexts(self, texts: Sequence[str]):
         for item in self.items():
             item.setCheckState(Qt.CheckState.Checked if (item.text() in texts) else Qt.CheckState.Unchecked)
 
-    def setCheckedData(self, data_items: Collection[Any]):
+    def setCheckedData(self, data_items: Union[Sequence[Any], enum.Flag]):
         for item in self.items():
             item.setCheckState(Qt.CheckState.Checked if (item.data() in data_items) else Qt.CheckState.Unchecked)
 
