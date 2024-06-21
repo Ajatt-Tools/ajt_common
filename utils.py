@@ -12,19 +12,6 @@ def ui_translate(key: str) -> str:
     return key.capitalize().replace("_", " ")
 
 
-def find_executable_with_distutils(name: str) -> Optional[str]:
-    """
-    Tries to find 'executable' using distutils.
-    Fedora might not have distutils present. If this is the case, don't crash and return None.
-    """
-    try:
-        from distutils.spawn import find_executable as _find
-    except ImportError:
-        return None
-    else:
-        return _find(name)
-
-
 HARDCODED_PATHS = (
     "/usr/bin",
     "/opt/homebrew/bin",
