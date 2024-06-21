@@ -4,7 +4,6 @@
 import functools
 import os
 import shutil
-from collections.abc import Iterable
 from typing import Optional
 
 
@@ -22,11 +21,8 @@ HARDCODED_PATHS = (
 
 
 def find_executable_hardcoded(name: str) -> Optional[str]:
-    def _iter() -> Iterable[str]:
-        return map(lambda path: os.path.join(path, name), HARDCODED_PATHS)
-
-    for path_to_exe in _iter():
-        if os.path.isfile(path_to_exe):
+    for path_to_dir in HARDCODED_PATHS:
+        if os.path.isfile(path_to_exe := os.path.join(path_to_dir, name)):
             return path_to_exe
 
 
