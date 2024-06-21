@@ -35,6 +35,10 @@ def find_executable(name: str) -> Optional[str]:
     return shutil.which(name) or find_executable_hardcoded(name)
 
 
+def clamp(min_val: int, val: int, max_val: int) -> int:
+    return max(min_val, min(val, max_val))
+
+
 def main():
     print("distutils", shutil.which("anki"))
     print("hardcoded", find_executable_hardcoded("anki"))
@@ -43,7 +47,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-def clamp(min_val: int, val: int, max_val: int) -> int:
-    return max(min_val, min(val, max_val))
