@@ -121,8 +121,8 @@ main() {
 		ADDON_ROOT=$addon_root \
 		git submodule foreach \
 		'PREFIX=${sm_path#$ADDON_ROOT/};
-		 echo "Prefix $PREFIX";
-		 git archive HEAD --prefix="${PREFIX:?}/" --format=zip --output "${ROOT_DIR:?}/${PREFIX}_${sha1}.zip"'
+		 echo "Prefix $PREFIX:${sha1}";
+		 git archive "${sha1}" --prefix="${PREFIX:?}/" --format=zip --output "${ROOT_DIR:?}/${PREFIX}_${sha1}.zip"'
 
 	zipmerge ./"$zip_name" ./*.zip
 	rm -v -- ./*.zip ./"$manifest" 2>/dev/null || true
