@@ -83,7 +83,7 @@ read_cmd_args() {
 			shift
 			;;
 		--root)
-			addon_root=$2 # usually *.ankiaddon
+			addon_root=$2
 			echo "explicitly set root dir to '$addon_root'"
 			shift
 			;;
