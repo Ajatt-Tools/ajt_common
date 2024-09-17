@@ -6,7 +6,17 @@ from aqt.qt import *
 from aqt.utils import openLink
 from aqt.webview import AnkiWebView
 
-from .consts import *
+from .consts import (
+    ABOUT_MSG,
+    ADDON_SERIES,
+    BUTTON_HEIGHT,
+    CHAT_ICON_PATH,
+    COMMUNITY_LINK,
+    DIALOG_NAME,
+    DONATE_ICON_PATH,
+    DONATE_LINK,
+    ICON_SIDE_LEN,
+)
 
 
 def garbage_collect_on_dialog_finish(dialog: QDialog):
