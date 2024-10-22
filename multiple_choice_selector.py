@@ -13,7 +13,7 @@ class MultipleChoiceSelector(QGroupBox):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._combo = CheckableComboBox()
-        self.setTitle("Limit to fields")
+        self.setTitle("Limit to selected fields")
         self.setCheckable(True)
         self.setChecked(False)
         self.setLayout(QVBoxLayout())
