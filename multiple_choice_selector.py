@@ -39,3 +39,6 @@ class MultipleChoiceSelector(QGroupBox):
             self._combo.setCheckedTexts(fields)
         else:
             self.setChecked(False)
+
+    def has_valid_selection(self) -> bool:
+        return self.isChecked() is False or len(self._combo.checkedTexts()) > 0
