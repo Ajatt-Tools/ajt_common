@@ -12,7 +12,7 @@ from .utils import ui_translate
 class EnumSelectCombo(QComboBox):
     def __init__(
         self,
-        enum_type: Optional[enum.EnumType] = None,
+        enum_type: Optional[enum.EnumMeta] = None,
         initial_value: Union[enum.Enum, str, None] = None,
         show_values: bool = False,
         parent=None,
@@ -21,7 +21,8 @@ class EnumSelectCombo(QComboBox):
         if enum_type is None:
             assert isinstance(initial_value, enum.Enum)
             enum_type = type(initial_value)
-        assert isinstance(enum_type, enum.EnumType)
+        # Note: The python 3.9 version of Anki does not support enum.EnumType
+        assert isinstance(enum_type, enum.EnumMeta)
         for item in enum_type:
             self.addItem(ui_translate(item.value if show_values else item.name), item)
         if initial_value is not None:
