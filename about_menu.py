@@ -24,6 +24,8 @@ def garbage_collect_on_dialog_finish(dialog: QDialog):
         mw.garbage_collect_on_dialog_finish(dialog)
     except AttributeError:
         pass
+    else:
+        print(f"dialog '{getattr(dialog, 'name', 'undefined')}' will be deleted on finish")
 
 
 def disable_help_button(dialog: QDialog):
