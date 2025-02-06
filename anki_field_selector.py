@@ -22,4 +22,8 @@ class AnkiFieldSelector(QComboBox):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setEditable(True)
-        self.addItems(dict.fromkeys(gather_all_field_names()))
+        try:
+            self.addItems(dict.fromkeys(gather_all_field_names()))
+        except AttributeError:
+            assert mw is None, "Anki can't be running."
+            self.addItems(["Anki is not running"] * 5)
