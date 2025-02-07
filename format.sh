@@ -2,7 +2,8 @@
 
 echo "Formatting $PWD"
 
-readonly ROOT_DIR=$(git rev-parse --show-toplevel)
+ROOT_DIR=$(git rev-parse --show-toplevel)
+readonly ROOT_DIR
 
 # Pass a list of files or take all files in the repository.
 
