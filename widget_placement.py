@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from collections.abc import Iterable
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 
 from aqt.qt import *
 
@@ -27,10 +27,11 @@ def widgets_to_grid_items(widgets: Iterable[QWidget], n_columns: int = 2) -> Ite
 def place_widgets_in_grid(
     widgets: Iterable[QWidget],
     n_columns: int = 2,
-    alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
+    alignment: Optional[Qt.AlignmentFlag] = Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
 ) -> QGridLayout:
     grid = QGridLayout()
-    grid.setAlignment(alignment)
+    if alignment is not None:
+        grid.setAlignment(alignment)
     for item in widgets_to_grid_items(widgets, n_columns):
         grid.addWidget(item.widget, item.row, item.col)
     return grid
