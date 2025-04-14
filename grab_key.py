@@ -74,6 +74,7 @@ class KeyPressDialog(QDialog):
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         # https://stackoverflow.com/questions/35033116
+        # https://doc.qt.io/qt-6/qdialog.html#keyPressEvent
         key = int(event.key())
         modifiers = event.modifiers()
 
