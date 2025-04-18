@@ -43,7 +43,7 @@ def tweak_window(dialog: QDialog) -> None:
 
 
 class AboutDialog(QDialog):
-    def __init__(self, parent: QWidget, *args, **kwargs):
+    def __init__(self, parent: QWidget, *args, **kwargs) -> None:
         super().__init__(parent=parent or mw, *args, **kwargs)
         tweak_window(self)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)

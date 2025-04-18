@@ -19,7 +19,7 @@ class AnkiFieldSelector(QComboBox):
     present in Note Types in the Anki collection.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.setEditable(True)
         try:

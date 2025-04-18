@@ -45,7 +45,7 @@ def to_int(modifiers) -> int:
 class KeyPressDialog(QDialog):
     value_accepted = pyqtSignal(str)
 
-    def __init__(self, parent: QWidget = None, initial_value: str = None, *args, **kwargs):
+    def __init__(self, parent: QWidget = None, initial_value: str = None, *args, **kwargs) -> None:
         super().__init__(parent, *args, **kwargs)
         self._shortcut = initial_value
         self.setMinimumSize(380, 64)
@@ -90,7 +90,7 @@ class KeyPressDialog(QDialog):
 class ShortCutGrabButton(QPushButton):
     _placeholder = "[Not assigned]"
 
-    def __init__(self, initial_value: str = None):
+    def __init__(self, initial_value: str = None) -> None:
         super().__init__(initial_value or self._placeholder)
         self._dialog = KeyPressDialog(self, initial_value)
         qconnect(self.clicked, self._dialog.exec)

@@ -148,7 +148,7 @@ class ChkComboTryWindow(QDialog):
         "Salt",
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.setWindowTitle("Test playground")
         self.setLayout(main_layout := QVBoxLayout())

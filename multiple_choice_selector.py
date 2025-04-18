@@ -10,7 +10,7 @@ from .checkable_combobox import CheckableComboBox
 
 
 class MultipleChoiceSelector(QGroupBox):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._combo = CheckableComboBox()
         self.setTitle("Limit to selected fields")
