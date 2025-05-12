@@ -1,16 +1,10 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
-from collections.abc import Iterable
-
 from aqt import mw
 from aqt.qt import *
 
-
-def gather_all_field_names() -> Iterable[str]:
-    for model in mw.col.models.all_names_and_ids():
-        for field in mw.col.models.get(model.id)["flds"]:
-            yield field["name"]
+from .model_utils import gather_all_field_names
 
 
 class AnkiFieldSelector(QComboBox):
