@@ -6,6 +6,8 @@ from typing import Optional
 
 from aqt import mw
 
+AnkiCardSide = typing.Literal["qfmt", "afmt"]
+
 
 class AnkiCardTemplateDict(typing.TypedDict):
     qfmt: str
