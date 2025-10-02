@@ -6,3 +6,5 @@ meta.json export-ignore
 .vscode export-ignore
 .mypy_cache export-ignore
 __pycache__ export-ignore
+README.md export-ignore
+LICENSE export-ignore

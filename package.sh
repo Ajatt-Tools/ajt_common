@@ -122,6 +122,7 @@ main() {
 			echo "SKIP submodule $sm_path"
 			exit
 		fi
+
 		PREFIX=${sm_path#$ADDON_ROOT/};
 		echo "Prefix $PREFIX:${sha1}";
 
