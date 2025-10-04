@@ -54,7 +54,6 @@ main() {
 
 	if (($# == 0)); then
 		readarray -t TO_FORMAT <<<"$(find "$ROOT_DIR" -iname '*.py')"
-		readonly -a TO_FORMAT
 	else
 		read_cmd_args "$@"
 		readarray -t FILES <<<"$(find "${INCLUDED[@]}" -iname '*.py')"
