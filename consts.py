@@ -4,7 +4,7 @@
 import os
 
 ADDON_SERIES = "AJT"
-DIALOG_NAME = "About"
+DIALOG_NAME = "About Ajatt-Tools"
 ANKIWEB_LINK = "https://ankiweb.net/shared/by-author/1344485230"
 WEBSITE_LINK = "https://tatsumoto.neocities.org/"
 COMMUNITY_LINK = "https://tatsumoto.neocities.org/blog/join-our-community.html"
