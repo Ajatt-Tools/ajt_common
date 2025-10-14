@@ -126,7 +126,7 @@ main() {
 	echo "Archiving submodules"
 	# shellcheck disable=SC2016
 	ROOT_DIR="$PWD" ADDON_ROOT="$addon_root" git submodule foreach '
-		if [[ $sm_path != $ADDON_ROOT/* ]]; then
+		if [[ $sm_path != $ADDON_ROOT/* ]] && [[ -n $ADDON_ROOT ]]; then
 			echo "SKIP submodule $sm_path"
 			exit
 		fi
