@@ -125,5 +125,8 @@ def create_about_action(parent: QWidget) -> QAction:
         return dialog.exec()
 
     action = QAction(f"{DIALOG_NAME}...", parent)
+    # Note: set menu role to prevent Anki from repositioning the menu on macOS.
+    # This is a known issue that occasionally occurs with some add-ons and macOS.
+    action.setMenuRole(QAction.MenuRole.NoRole)
     qconnect(action.triggered, open_about_dialog)
     return action
