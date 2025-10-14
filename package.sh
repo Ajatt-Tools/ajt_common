@@ -97,6 +97,9 @@ read_cmd_args() {
 		esac
 		shift
 	done
+	if [[ -z $addon_root ]] || [[ $addon_root == '.' ]]; then
+		addon_root=''
+	fi
 	readonly package name target addon_root
 	zip_name=${zip_name:-${package,,}.ankiaddon}
 	zip_name=${zip_name// /_}
@@ -110,6 +113,11 @@ main() {
 
 	read_cmd_args "$@"
 	check_correct_cwd
+
+	if [[ -z $name ]] || [[ $name == unknown ]]; then
+		echo -e "${RED}Name is not set${NC}"
+		exit 1
+	fi
 
 	echo "Packaging $name"
 	echo "Archiving root repo"
