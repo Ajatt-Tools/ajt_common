@@ -7,8 +7,10 @@ from aqt.qt import *
 
 from .restore_geom_dialog import AnkiSaveAndRestoreGeomDialog
 
+
 class StatsTableError(RuntimeError):
     pass
+
 
 class StatsTable(QTableWidget):
     _column_names: Sequence[str]
@@ -54,8 +56,7 @@ class StatsDialog(AnkiSaveAndRestoreGeomDialog):
         for idx, row in enumerate(data):
             self._table.insertRow(idx)
             if len(row) != self._table.columnCount():
-                raise StatsTableError(
-                    f"row {idx} has {len(row)} columns but expected {self._table.columnCount()}")
+                raise StatsTableError(f"row {idx} has {len(row)} columns but expected {self._table.columnCount()}")
             for jdx, item in enumerate(row):
                 self._table.setItem(idx, jdx, QTableWidgetItem(str(item)))
         return self
