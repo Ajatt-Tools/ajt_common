@@ -33,6 +33,8 @@ class StatsTable(QTableWidget):
 class StatsDialog(AnkiSaveAndRestoreGeomDialog):
     name: str
     win_title: str
+    button_box_buttons: QDialogButtonBox.StandardButton = QDialogButtonBox.StandardButton.Ok
+
     _table: StatsTable
     _button_box: QDialogButtonBox
 
@@ -42,7 +44,7 @@ class StatsDialog(AnkiSaveAndRestoreGeomDialog):
         self.setMinimumSize(400, 300)
         self._table = StatsTable(column_names=column_names)
         self.setLayout(QVBoxLayout())
-        self._button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok)
+        self._button_box = QDialogButtonBox(self.button_box_buttons)
         self.layout().addWidget(self._table)
         self.layout().addWidget(self._button_box)
         qconnect(self._button_box.accepted, self.accept)
