@@ -42,13 +42,17 @@ class StatsDialog(AnkiSaveAndRestoreGeomDialog):
 
     def __init__(self, column_names: Sequence[str], parent=None) -> None:
         super().__init__(parent=parent)
+        # Members
+        self._layout = QVBoxLayout()
+        self._table = StatsTable(column_names=column_names)
+        self._button_box = QDialogButtonBox(self.button_box_buttons)
+        # Layout
+        self.setLayout(self._layout)
         self.setWindowTitle(self.win_title)
         self.setMinimumSize(400, 300)
-        self._table = StatsTable(column_names=column_names)
-        self.setLayout(QVBoxLayout())
-        self._button_box = QDialogButtonBox(self.button_box_buttons)
         self.layout().addWidget(self._table)
         self.layout().addWidget(self._button_box)
+        # Buttons
         qconnect(self._button_box.accepted, self.accept)
         qconnect(self._button_box.rejected, self.reject)
 
