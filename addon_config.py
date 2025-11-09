@@ -79,9 +79,13 @@ class AddonConfigABC(abc.ABC):
     def keys(self) -> Iterable[str]:
         return self.default_config.keys()
 
+    def keys_with_values_of_type(self, value_type: type) -> Iterable[str]:
+        """Returns an iterable of parameters with values of type "value_type" (e.g. str) in the config."""
+        return (key for key, value in self.default_config.items() if isinstance(value, value_type))
+
     def bool_keys(self) -> Iterable[str]:
         """Returns an iterable of boolean (toggleable) parameters in the config."""
-        return (key for key, value in self.default_config.items() if isinstance(value, bool))
+        return self.keys_with_values_of_type(bool)
 
     def items(self) -> Iterable[tuple[str, Any]]:
         for key in self.keys():
