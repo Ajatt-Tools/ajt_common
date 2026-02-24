@@ -3,9 +3,12 @@
 
 import functools
 import os
+import pathlib
 import shutil
+import subprocess
 from typing import Callable, Optional, Union
 
+from anki.utils import no_bundled_libs
 from aqt.qt import pyqtBoundSignal, pyqtSignal
 
 
@@ -51,6 +54,32 @@ def q_emit(signal: Union[Callable, pyqtSignal, pyqtBoundSignal], value=MISSING) 
         signal.emit(value)  # type: ignore
     else:
         signal.emit()  # type: ignore
+
+
+def open_file(path: Union[str, pathlib.Path]) -> None:
+    """
+    Select file in lf, the preferred terminal file manager, or open it with xdg-open.
+    """
+    from aqt.qt import QDesktopServices, QUrl
+
+    terminal = os.getenv("TERMINAL") or find_executable("i3-sensible-terminal")
+    lf = os.getenv("FILE") or find_executable("lf")
+
+    if terminal and lf:
+        subprocess.Popen(
+            [terminal, "-e", lf, path],
+            shell=False,
+            start_new_session=True,
+        )
+    elif opener := find_executable("xdg-open"):
+        subprocess.Popen(
+            [opener, f"file://{path}"],
+            shell=False,
+            start_new_session=True,
+        )
+    else:
+        with no_bundled_libs():
+            QDesktopServices.openUrl(QUrl(f"file://{path}"))
 
 
 def main():
