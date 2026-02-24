@@ -1,10 +1,11 @@
 # Copyright: Ajatt-Tools and contributors; https://github.com/Ajatt-Tools
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
+from gettext import gettext as _
+
 from aqt.qt import *
 
 from .monospace_line_edit import MonoSpaceLineEdit
-from gettext import gettext as _
 
 
 class ColorEdit(MonoSpaceLineEdit):
