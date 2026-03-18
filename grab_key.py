@@ -6,10 +6,6 @@ from typing import Optional
 from aqt.qt import *
 
 
-def mod_mask_qt5():
-    return Qt.Modifier.CTRL | Qt.Modifier.ALT | Qt.Modifier.SHIFT | Qt.Modifier.META
-
-
 def mod_mask_qt6():
     return (
         Qt.KeyboardModifier.ControlModifier
@@ -28,18 +24,12 @@ def forbidden_keys():
     )
 
 
-def modifiers_allowed(modifiers) -> bool:
-    try:
-        return modifiers & mod_mask_qt5() == modifiers
-    except TypeError:
-        return modifiers & mod_mask_qt6() == modifiers  # Qt6
+def modifiers_allowed(modifiers: Qt.KeyboardModifier) -> bool:
+    return modifiers & mod_mask_qt6() == modifiers  # Qt6
 
 
-def to_int(modifiers) -> int:
-    try:
-        return int(modifiers)
-    except TypeError:
-        return int(modifiers.value)  # Qt6
+def to_int(modifiers: Qt.KeyboardModifier) -> int:
+    return int(modifiers.value)  # Qt6
 
 
 class KeyPressDialog(QDialog):
@@ -106,7 +96,7 @@ class ShortCutGrabButton(QPushButton):
         return self._dialog.value() or ""
 
 
-def detect_keypress():
+def detect_keypress() -> None:
     app = QApplication(sys.argv)
     w = QDialog()
     w.setWindowTitle("Test")
