@@ -49,6 +49,15 @@ is_excluded() {
 	return 1
 }
 
+exit_if_tools_not_installed() {
+	for prog in pyupgrade isort black; do
+		if ! [[ -x $(command -v "$prog") ]]; then
+			echo "command not found: $prog"
+			exit 1
+		fi
+	done
+}
+
 main() {
 	TO_FORMAT=()
 
@@ -68,6 +77,8 @@ main() {
 		done
 	fi
 	readonly -a TO_FORMAT
+
+	exit_if_tools_not_installed
 	pyupgrade --py39-plus "${TO_FORMAT[@]}"
 	isort "${TO_FORMAT[@]}"
 	black --line-length 120 --target-version py39 "${TO_FORMAT[@]}"
