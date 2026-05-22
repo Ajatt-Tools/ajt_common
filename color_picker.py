@@ -20,6 +20,11 @@ class ColorEdit(MonoSpaceLineEdit):
         self.setPlaceholderText(_("HTML color code"))
 
 
+def color_to_hex_argb(color: QColor) -> str:
+    """Return the color as a hex ARGB string."""
+    return color.name(QColor.NameFormat.HexArgb).upper()
+
+
 class ColorEditPicker(QWidget):
     def __init__(self, initial_color: str = "", parent=None) -> None:
         super().__init__(parent)
@@ -38,6 +43,11 @@ class ColorEditPicker(QWidget):
         if color.isValid():
             self._edit.setText(color.name())
 
+    def set_color(self, hex_color: str) -> None:
+        """Set the color from a hex ARGB string."""
+        self._edit.setText(hex_color.upper())
+
+    @deprecated(replaced_by=set_color)
     def setText(self, text: str) -> None:
         return self._edit.setText(text)
 
