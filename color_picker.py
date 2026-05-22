@@ -55,17 +55,17 @@ class ColorEditPicker(QWidget):
             self._edit.setText(color_to_hex_argb(color))
 
     def set_color(self, hex_color: str) -> None:
-        """Set the color from a hex ARGB string."""
-        self._edit.setText(hex_color.upper())
+        """Set the color. Accepts hex ARGB strings or named HTML colors."""
+        self._edit.setText(hex_color)
 
     def color_hex(self) -> str:
-        """Return the current color as a hex ARGB string."""
-        return self._edit.text().upper()
+        """Return the current color string (hex ARGB or named color)."""
+        return self._edit.text()
 
     @deprecated(replaced_by=set_color)
     def setText(self, text: str) -> None:
-        self._edit.setText(text)
+        self.set_color(text)
 
     @deprecated(replaced_by=color_hex)
     def text(self) -> str:
-        return self._edit.text()
+        return self.color_hex()
