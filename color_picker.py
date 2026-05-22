@@ -8,6 +8,8 @@ from aqt.qt import *
 
 from .monospace_line_edit import MonoSpaceLineEdit
 
+DEFAULT_COLOR = "black"
+
 
 class ColorEdit(MonoSpaceLineEdit):
     font_size = 14
@@ -31,7 +33,7 @@ class ColorEditPicker(QWidget):
         super().__init__(parent)
         # Create members
         self._edit = ColorEdit()
-        self.set_color(initial_color or "black")
+        self.set_color(initial_color or DEFAULT_COLOR)
         # Create layout
         self.setLayout(layout := QHBoxLayout())
         layout.setContentsMargins(0, 0, 0, 0)
@@ -44,7 +46,7 @@ class ColorEditPicker(QWidget):
 
     def choose_color(self) -> None:
         color = QColorDialog.getColor(
-            initial=QColor.fromString(self._edit.text() or "black"),
+            initial=QColor.fromString(self._edit.text() or DEFAULT_COLOR),
             parent=self,
             title="Select color",
             options=QColorDialog.ColorDialogOption.ShowAlphaChannel,
