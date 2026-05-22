@@ -21,9 +21,10 @@ class ColorEdit(MonoSpaceLineEdit):
 
 
 class ColorEditPicker(QWidget):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(self, initial_color: str = "", parent=None) -> None:
+        super().__init__(parent)
         self._edit = ColorEdit()
+        self.set_color(initial_color or "black")
         self.setLayout(layout := QHBoxLayout())
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._edit)
