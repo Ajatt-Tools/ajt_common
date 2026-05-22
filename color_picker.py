@@ -49,7 +49,7 @@ class ColorEditPicker(QWidget):
             options=QColorDialog.ColorDialogOption.ShowAlphaChannel,
         )
         if color.isValid():
-            self._edit.setText(color.name())
+            self._edit.setText(color_to_hex_argb(color))
 
     def set_color(self, hex_color: str) -> None:
         """Set the color from a hex ARGB string."""
