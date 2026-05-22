@@ -28,8 +28,10 @@ def color_to_hex_argb(color: QColor) -> str:
 class ColorEditPicker(QWidget):
     def __init__(self, initial_color: str = "", parent=None) -> None:
         super().__init__(parent)
+        # Create members
         self._edit = ColorEdit()
         self.set_color(initial_color or "black")
+        # Create layout
         self.setLayout(layout := QHBoxLayout())
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._edit)
