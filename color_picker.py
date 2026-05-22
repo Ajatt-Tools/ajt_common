@@ -61,7 +61,7 @@ class ColorEditPicker(QWidget):
 
     @deprecated(replaced_by=set_color)
     def setText(self, text: str) -> None:
-        return self._edit.setText(text)
+        self._edit.setText(text)
 
     @deprecated(replaced_by=color_hex)
     def text(self) -> str:
