@@ -104,7 +104,7 @@ def detect_keypress() -> None:
     layout.addWidget(b := ShortCutGrabButton())
     w.show()
     code = app.exec()
-    print(f"{'Accepted' if w.result() else 'Rejected'}. Code: {code}, shortcut: \"{b.value()}\"")
+    print(f'{"Accepted" if w.result() else "Rejected"}. Code: {code}, shortcut: "{b.value()}"')
     sys.exit(code)
 
 
