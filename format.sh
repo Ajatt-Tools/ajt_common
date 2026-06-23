@@ -2,13 +2,20 @@
 
 set -euo pipefail
 
-echo "Formatting $PWD"
-
 ROOT_DIR=$(git rev-parse --show-toplevel)
 readonly ROOT_DIR
 
+echo "Formatting $ROOT_DIR"
+
 EXCLUDED=()
 INCLUDED=()
+
+die_if_no_arg() {
+	if [[ $# -eq 0 ]]; then
+		echo "Missing path for $1"
+		exit 1
+	fi
+}
 
 read_cmd_args() {
 	local fp
@@ -16,12 +23,14 @@ read_cmd_args() {
 		case $1 in
 		-e|--exclude)
 			shift
+			die_if_no_arg "$@"
 			fp="${ROOT_DIR%%/}/${1%%/}"
 			EXCLUDED+=("$fp")
 			echo "exclude $fp"
 			;;
 		-i|--include)
 			shift
+			die_if_no_arg "$@"
 			fp="${ROOT_DIR%%/}/${1%%/}"
 			INCLUDED+=("$fp")
 			echo "include $fp"
@@ -59,6 +68,7 @@ exit_if_tools_not_installed() {
 }
 
 main() {
+	exit_if_tools_not_installed
 	local TO_FORMAT=()
 	read_cmd_args "$@"
 	if [[ ${#INCLUDED[@]} -eq 0 ]]; then
@@ -69,6 +79,10 @@ main() {
 	fi
 	readonly -a FILES
 
+	if [[ ${#FILES[@]} -eq 0 ]] || [[ -z "${FILES[0]}" ]]; then
+		echo "No Python files found."
+		exit 0
+	fi
 	for file in "${FILES[@]}"; do
 		if is_excluded "$file"; then
 			echo "excluded: $file"
@@ -78,7 +92,6 @@ main() {
 	done
 	readonly -a TO_FORMAT
 
-	exit_if_tools_not_installed
 	pyupgrade --py39-plus "${TO_FORMAT[@]}"
 	isort "${TO_FORMAT[@]}"
 	black --line-length 120 --target-version py39 "${TO_FORMAT[@]}"
