@@ -59,23 +59,23 @@ exit_if_tools_not_installed() {
 }
 
 main() {
-	TO_FORMAT=()
-
-	if (($# == 0)); then
-		readarray -t TO_FORMAT <<<"$(find "$ROOT_DIR" -iname '*.py')"
+	local TO_FORMAT=()
+	read_cmd_args "$@"
+	if [[ ${#INCLUDED[@]} -eq 0 ]]; then
+		# included list is not provided
+		readarray -t FILES <<<"$(find "$ROOT_DIR" -iname '*.py')"
 	else
-		read_cmd_args "$@"
 		readarray -t FILES <<<"$(find "${INCLUDED[@]}" -iname '*.py')"
-		readonly -a FILES
-
-		for file in "${FILES[@]}"; do
-			if is_excluded "$file"; then
-				echo "excluded: $file"
-			else
-				TO_FORMAT+=("$file")
-			fi
-		done
 	fi
+	readonly -a FILES
+
+	for file in "${FILES[@]}"; do
+		if is_excluded "$file"; then
+			echo "excluded: $file"
+		else
+			TO_FORMAT+=("$file")
+		fi
+	done
 	readonly -a TO_FORMAT
 
 	exit_if_tools_not_installed
