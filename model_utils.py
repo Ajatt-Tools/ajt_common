@@ -50,4 +50,7 @@ def gather_all_field_names() -> Iterable[str]:
     """
     Returns all field names found in all note types found in the collection.
     """
+    if not mw:
+        # running from playground
+        return ["anki", "is not", "running"]
     return relevant_field_names()
