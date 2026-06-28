@@ -111,6 +111,10 @@ class AddonConfigABC(abc.ABC):
             )
 
 
+class AddonConfigManagerError(RuntimeError):
+    pass
+
+
 class AddonConfigManager(AddonConfigABC):
     """
     Dict-like proxy class for managing addon's config.
@@ -119,14 +123,20 @@ class AddonConfigManager(AddonConfigABC):
 
     _default_config: dict
     _config: dict
+    _allow_disk_writes: bool
 
-    def __init__(self, default: bool = False) -> None:
+    def __init__(self, default: bool = False, *, allow_disk_writes: bool = True) -> None:
+        self._allow_disk_writes = allow_disk_writes
         self._set_underlying_dicts()
         if default:
             self._config = self._default_config
 
         assert isinstance(self.config, dict)
         assert isinstance(self.default_config, dict)
+
+    @classmethod
+    def clone(cls, default: bool = False) -> "AddonConfigManager":
+        return cls(default=default, allow_disk_writes=False)
 
     def _set_underlying_dicts(self) -> None:
         self._default_config = get_default_config()
@@ -164,13 +174,15 @@ class AddonConfigManager(AddonConfigABC):
         import copy
 
         if self.is_default:
-            raise RuntimeError("Can't copy default config.")
+            raise AddonConfigManagerError("Can't copy default config.")
         return copy.deepcopy(self.config)
 
     def write_config(self) -> None:
         if self.is_default:
-            raise RuntimeError("Can't write default config.")
-        return write_config(self.config)
+            raise AddonConfigManagerError("Can't write default config.")
+        if not self._allow_disk_writes:
+            raise AddonConfigManagerError("Writing to disk disabled.")
+        write_config(self.config)
 
 
 class ConfigSubViewBase(AddonConfigABC):
@@ -198,4 +210,4 @@ class ConfigSubViewBase(AddonConfigABC):
         return self._manager.default_config[self._view_key]
 
     def write_config(self) -> None:
-        raise RuntimeError("Can't call this function from a sub-view.")
+        raise AddonConfigManagerError("Can't call this function from a sub-view.")
