@@ -92,9 +92,9 @@ main() {
 	done
 	readonly -a TO_FORMAT
 
-	pyupgrade --py39-plus "${TO_FORMAT[@]}"
+	pyupgrade --py310-plus "${TO_FORMAT[@]}"
 	isort "${TO_FORMAT[@]}"
-	black --line-length 120 --target-version py39 "${TO_FORMAT[@]}"
+	black --line-length 120 --target-version py310 "${TO_FORMAT[@]}"
 }
 
 main "$@"

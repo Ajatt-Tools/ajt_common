@@ -1,12 +1,11 @@
 # Copyright: Ajatt-Tools and contributors; https://github.com/Ajatt-Tools
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
-
-from typing import Optional
+from collections.abc import Sequence
 
 from aqt.qt import *
 
 
-def mod_mask_qt6():
+def mod_mask_qt6() -> Qt.KeyboardModifier:
     return (
         Qt.KeyboardModifier.ControlModifier
         | Qt.KeyboardModifier.AltModifier
@@ -15,7 +14,7 @@ def mod_mask_qt6():
     )
 
 
-def forbidden_keys():
+def forbidden_keys() -> Sequence[Qt.Key]:
     return (
         Qt.Key.Key_Shift,
         Qt.Key.Key_Alt,
@@ -54,11 +53,11 @@ class KeyPressDialog(QDialog):
         layout.addWidget(label)
         return layout
 
-    def _accept_value(self, value: Optional[str]) -> None:
+    def _accept_value(self, value: str | None) -> None:
         self.set_value(value)
         self.accept()
 
-    def set_value(self, value: Optional[str]) -> None:
+    def set_value(self, value: str | None) -> None:
         self._shortcut = value
         self.value_accepted.emit(value)  # type: ignore
 
@@ -73,7 +72,7 @@ class KeyPressDialog(QDialog):
         elif modifiers and modifiers_allowed(modifiers) and key > 0 and key not in forbidden_keys():
             self._accept_value(QKeySequence(to_int(modifiers) + key).toString())
 
-    def value(self) -> Optional[str]:
+    def value(self) -> str | None:
         return self._shortcut
 
 
@@ -89,7 +88,7 @@ class ShortCutGrabButton(QPushButton):
             lambda value: self.setText(value or self._placeholder),
         )
 
-    def setValue(self, value: str):
+    def setValue(self, value: str) -> None:
         self._dialog.set_value(value)
 
     def value(self) -> str:

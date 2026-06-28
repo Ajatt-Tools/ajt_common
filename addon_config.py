@@ -2,8 +2,8 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 import abc
-from collections.abc import Iterable
-from typing import Any, Callable, Optional, cast
+from collections.abc import Callable, Iterable
+from typing import Any, Optional, cast
 
 import aqt
 from aqt import mw
@@ -57,7 +57,7 @@ class AddonConfigABC(abc.ABC):
     def default_config(self) -> dict:
         raise NotImplementedError()
 
-    def __getitem__(self, key: str):
+    def __getitem__(self, key: str) -> Any:
         if key in self.default_config:
             return self.config.get(key, self.default_config[key])
         else:
@@ -71,7 +71,7 @@ class AddonConfigABC(abc.ABC):
         else:
             self.config[key] = value
 
-    def get(self, key, default=None):
+    def get(self, key: str, default=None) -> Any:
         try:
             return self[key]
         except KeyError:
@@ -103,7 +103,7 @@ class AddonConfigABC(abc.ABC):
             self.config.clear()
         self.config.update(another)
 
-    def _raise_if_redundant_keys(self, new_config: dict):
+    def _raise_if_redundant_keys(self, new_config: dict) -> None:
         if redundant_keys := [key for key in new_config if key not in self.default_config]:
             raise RuntimeError(
                 "Passed a new config with keys that aren't present in the default config: %s."
@@ -167,7 +167,7 @@ class AddonConfigManager(AddonConfigABC):
             raise RuntimeError("Can't copy default config.")
         return copy.deepcopy(self.config)
 
-    def write_config(self):
+    def write_config(self) -> None:
         if self.is_default:
             raise RuntimeError("Can't write default config.")
         return write_config(self.config)
@@ -181,7 +181,7 @@ class ConfigSubViewBase(AddonConfigABC):
     _view_key: str
     _manager: AddonConfigABC
 
-    def __init__(self, manager: AddonConfigABC, view_key: Optional[str] = None) -> None:
+    def __init__(self, manager: AddonConfigABC, view_key: str | None = None) -> None:
         self._view_key = view_key or self._view_key
         if not self._view_key:
             raise ValueError("view key must be set.")

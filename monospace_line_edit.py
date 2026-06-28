@@ -1,6 +1,8 @@
 # Copyright: Ajatt-Tools and contributors; https://github.com/Ajatt-Tools
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
+from typing import Any
+
 from aqt.qt import *
 
 
@@ -11,18 +13,20 @@ class MonoSpaceLineEdit(QLineEdit):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         font = self.font()
-        font.setFamilies((
-            "Noto Mono",
-            "Noto Sans Mono",
-            "DejaVu Sans Mono",
-            "Droid Sans Mono",
-            "Liberation Mono",
-            "Courier New",
-            "Courier",
-            "Lucida",
-            "Monaco",
-            "Monospace",
-        ))
+        font.setFamilies(
+            (
+                "Noto Mono",
+                "Noto Sans Mono",
+                "DejaVu Sans Mono",
+                "Droid Sans Mono",
+                "Liberation Mono",
+                "Courier New",
+                "Courier",
+                "Lucida",
+                "Monaco",
+                "Monospace",
+            )
+        )
         font.setPixelSize(self.font_size)
         self.setMinimumHeight(self.min_height)
         self.setFont(font)

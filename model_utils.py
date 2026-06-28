@@ -28,7 +28,7 @@ class AnkiNoteTypeDict(typing.TypedDict):
     flds: list[AnkiNoteTypeFieldDict]
 
 
-def get_model_field_names(model_dict: typing.Optional[AnkiNoteTypeDict]) -> Iterable[str]:
+def get_model_field_names(model_dict: AnkiNoteTypeDict | None) -> Iterable[str]:
     """
     Returns all field names found in the note type.
     """
@@ -37,7 +37,7 @@ def get_model_field_names(model_dict: typing.Optional[AnkiNoteTypeDict]) -> Iter
     return (field["name"] for field in model_dict["flds"])
 
 
-def relevant_field_names(note_type_name_fuzzy: Optional[str] = None) -> Iterable[str]:
+def relevant_field_names(note_type_name_fuzzy: str | None = None) -> Iterable[str]:
     """
     Return an iterable of field names present in note types whose names contain the first parameter.
     """

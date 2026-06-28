@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from collections.abc import Iterable
-from typing import Optional
+from typing import Any, Optional
 
 from aqt.qt import *
 
@@ -20,20 +20,20 @@ class MultipleChoiceSelector(QGroupBox):
         self.layout().addWidget(self._combo)
         qconnect(self.toggled, self._react_to_toggle)
 
-    def _react_to_toggle(self, on: bool):
+    def _react_to_toggle(self, on: bool) -> None:
         self._combo.setHidden(not on)
 
     def setChecked(self, on: bool) -> None:
         self._react_to_toggle(on)
         return super().setChecked(on)
 
-    def set_texts(self, fields: Iterable[str]):
+    def set_texts(self, fields: Iterable[str]) -> None:
         return self._combo.setCheckableTexts(fields)
 
     def checked_texts(self) -> list[str]:
         return list(self._combo.checkedTexts()) if self.isChecked() else []
 
-    def set_checked_texts(self, fields: Optional[list[str]]):
+    def set_checked_texts(self, fields: list[str] | None) -> None:
         if fields:
             self.setChecked(True)
             self._combo.setCheckedTexts(fields)

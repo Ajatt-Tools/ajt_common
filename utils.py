@@ -6,7 +6,8 @@ import os
 import pathlib
 import shutil
 import subprocess
-from typing import Callable, Optional, Union
+from collections.abc import Callable
+from typing import Optional, Union
 
 from anki.utils import no_bundled_libs
 from aqt.qt import pyqtBoundSignal, pyqtSignal
@@ -25,7 +26,7 @@ HARDCODED_PATHS = (
 )
 
 
-def find_executable_hardcoded(name: str) -> Optional[str]:
+def find_executable_hardcoded(name: str) -> str | None:
     for path_to_dir in HARDCODED_PATHS:
         if os.path.isfile(path_to_exe := os.path.join(path_to_dir, name)):
             return path_to_exe
@@ -33,7 +34,7 @@ def find_executable_hardcoded(name: str) -> Optional[str]:
 
 
 @functools.cache
-def find_executable(name: str) -> Optional[str]:
+def find_executable(name: str) -> str | None:
     """
     If possible, use the executable installed in the system.
     Otherwise, try fallback paths.
@@ -48,7 +49,7 @@ def clamp(min_val: int, val: int, max_val: int) -> int:
 MISSING = object()
 
 
-def q_emit(signal: Union[Callable, pyqtSignal, pyqtBoundSignal], value=MISSING) -> None:
+def q_emit(signal: Callable | pyqtSignal | pyqtBoundSignal, value=MISSING) -> None:
     """Helper to work around type checking not working with signal.emit(func)."""
     if value is not MISSING:
         signal.emit(value)  # type: ignore
@@ -56,7 +57,7 @@ def q_emit(signal: Union[Callable, pyqtSignal, pyqtBoundSignal], value=MISSING) 
         signal.emit()  # type: ignore
 
 
-def open_file(path: Union[str, pathlib.Path]) -> None:
+def open_file(path: str | pathlib.Path) -> None:
     """
     Select file in lf, the preferred terminal file manager, or open it with xdg-open.
     """
@@ -82,7 +83,7 @@ def open_file(path: Union[str, pathlib.Path]) -> None:
             QDesktopServices.openUrl(QUrl(f"file://{path}"))
 
 
-def main():
+def main() -> None:
     print("distutils", shutil.which("anki"))
     print("hardcoded", find_executable_hardcoded("anki"))
     print("all", find_executable("anki"))

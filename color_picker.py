@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from gettext import gettext as _
-from typing import Optional
+from typing import Any, Optional
 
 from aqt.qt import *
 
@@ -29,7 +29,7 @@ def color_to_hex_argb(color: QColor) -> str:
 
 
 class ColorEditPicker(QWidget):
-    def __init__(self, initial_color: str = "", parent: Optional[QWidget] = None) -> None:
+    def __init__(self, initial_color: str = "", parent: QWidget | None = None) -> None:
         super().__init__(parent)
         # Create members
         self._edit = ColorEdit()

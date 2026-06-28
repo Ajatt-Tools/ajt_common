@@ -19,7 +19,7 @@ from .consts import (
 )
 
 
-def garbage_collect_on_dialog_finish(dialog: QDialog):
+def garbage_collect_on_dialog_finish(dialog: QDialog) -> None:
     try:
         mw.garbage_collect_on_dialog_finish(dialog)
     except AttributeError:
@@ -28,7 +28,7 @@ def garbage_collect_on_dialog_finish(dialog: QDialog):
         print(f"dialog '{getattr(dialog, 'name', 'undefined')}' will be deleted on finish")
 
 
-def disable_help_button(dialog: QDialog):
+def disable_help_button(dialog: QDialog) -> None:
     try:
         from aqt.utils import disable_help_button as _disable_help_button
 
@@ -61,13 +61,13 @@ class AboutDialog(QDialog):
         return webview
 
     def make_button_box(self) -> QLayout:
-        def ok():
+        def ok() -> None:
             but = QPushButton("Ok")
             qconnect(but.clicked, self.accept)
             but.setFixedHeight(BUTTON_HEIGHT)
             return but
 
-        def community():
+        def community() -> None:
             but = QPushButton("Join our community")
             qconnect(but.clicked, lambda: openLink(COMMUNITY_LINK))
             but.setIcon(QIcon(CHAT_ICON_PATH))
@@ -75,7 +75,7 @@ class AboutDialog(QDialog):
             but.setFixedHeight(BUTTON_HEIGHT)
             return but
 
-        def donate():
+        def donate() -> None:
             but = QPushButton("Donate")
             qconnect(but.clicked, lambda: openLink(DONATE_LINK))
             but.setIcon(QIcon(DONATE_ICON_PATH))
@@ -120,7 +120,7 @@ def menu_root_entry() -> QMenu:
 
 
 def create_about_action(parent: QWidget) -> QAction:
-    def open_about_dialog():
+    def open_about_dialog() -> None:
         dialog = AboutDialog(mw)
         return dialog.exec()
 

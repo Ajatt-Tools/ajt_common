@@ -47,7 +47,7 @@ class CheckableComboBox(QComboBox):
         # Prevent popup from closing when clicking on an item
         self.view().viewport().installEventFilter(self)
 
-    def handle_item_pressed(self, index) -> None:
+    def handle_item_pressed(self, index: int) -> None:
         """Check the pressed item if unchecked and vice-versa"""
         item: QStandardItem = self.model().itemFromIndex(index)
         if item.checkState() == Qt.CheckState.Checked:
@@ -85,18 +85,18 @@ class CheckableComboBox(QComboBox):
         # Refresh the display text when closing
         self.updateText()
 
-    def timerEvent(self, event):
+    def timerEvent(self, event: QTimerEvent) -> None:
         """After timeout, kill timer, and re-enable click on line-edit"""
         self.killTimer(event.timerId())
         self._opened = False
 
-    def updateText(self):
+    def updateText(self) -> None:
         self.lineEdit().setText(", ".join(self.checkedTexts()))
 
-    def addCheckableText(self, text: str):
+    def addCheckableText(self, text: str) -> None:
         return self.addCheckableItem(text)
 
-    def addCheckableItem(self, text: str, data: Any = MISSING) -> None:
+    def addCheckableItem(self, text: str, data=MISSING) -> None:
         item = QStandardItem()
         item.setText(text)
         item.setCheckable(True)
@@ -123,11 +123,11 @@ class CheckableComboBox(QComboBox):
     def checkedTexts(self) -> Sequence[str]:
         return tuple(item.text() for item in self.checkedItems())
 
-    def setCheckedTexts(self, texts: Sequence[str]):
+    def setCheckedTexts(self, texts: Sequence[str]) -> None:
         for item in self.items():
             item.setCheckState(Qt.CheckState.Checked if (item.text() in texts) else Qt.CheckState.Unchecked)
 
-    def setCheckedData(self, data_items: Union[Sequence[Any], enum.Flag]):
+    def setCheckedData(self, data_items: Union[Sequence[Any], enum.Flag]) -> None:
         for item in self.items():
             item.setCheckState(Qt.CheckState.Checked if (item.data() in data_items) else Qt.CheckState.Unchecked)
 
@@ -162,7 +162,7 @@ class ChkComboTryWindow(QDialog):
         qconnect(print_button.clicked, lambda: print("\n".join(combo_box.checkedTexts())))
 
 
-def main():
+def main() -> None:
     app = QApplication(sys.argv)
     window = ChkComboTryWindow()
     window.show()

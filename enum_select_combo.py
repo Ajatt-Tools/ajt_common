@@ -12,7 +12,7 @@ from .utils import ui_translate
 class EnumSelectCombo(QComboBox):
     def __init__(
         self,
-        enum_type: Optional[enum.EnumMeta] = None,
+        enum_type: enum.EnumMeta | None = None,
         initial_value: Union[enum.Enum, str, None] = None,
         show_values: bool = False,
         parent=None,

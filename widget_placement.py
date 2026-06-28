@@ -27,7 +27,7 @@ def widgets_to_grid_items(widgets: Iterable[QWidget], n_columns: int = 2) -> Ite
 def place_widgets_in_grid(
     widgets: Iterable[QWidget],
     n_columns: int = 2,
-    alignment: Optional[Qt.AlignmentFlag] = Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
+    alignment: Qt.AlignmentFlag | None = Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
 ) -> QGridLayout:
     grid = QGridLayout()
     if alignment is not None:

@@ -2,6 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from collections.abc import Sequence
+from typing import Optional
 
 from aqt.qt import *
 
@@ -15,7 +16,7 @@ class StatsTableError(RuntimeError):
 class StatsTable(QTableWidget):
     _column_names: Sequence[str]
 
-    def __init__(self, column_names: Sequence[str], parent=None) -> None:
+    def __init__(self, column_names: Sequence[str], parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self._column_names = column_names
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
@@ -40,7 +41,7 @@ class StatsDialog(AnkiSaveAndRestoreGeomDialog):
     _table: StatsTable
     _button_box: QDialogButtonBox
 
-    def __init__(self, column_names: Sequence[str], parent=None) -> None:
+    def __init__(self, column_names: Sequence[str], parent: QWidget | None = None) -> None:
         super().__init__(parent=parent)
         # Members
         self._layout = QVBoxLayout()

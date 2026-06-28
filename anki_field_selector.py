@@ -14,7 +14,7 @@ class EditableSelector(QComboBox):
     Convenience class for making combo boxes with editable input field.
     """
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self.setEditable(True)
 
@@ -25,7 +25,7 @@ class AnkiFieldSelector(EditableSelector):
     present in Note Types in the Anki collection.
     """
 
-    def __init__(self, initial_value: Optional[str] = None, parent=None) -> None:
+    def __init__(self, initial_value: str | None = None, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self.clear()
         try:

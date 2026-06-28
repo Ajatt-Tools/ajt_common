@@ -1,8 +1,14 @@
 # Copyright: Ajatt-Tools and contributors; https://github.com/Ajatt-Tools
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
+from typing import Any
+
 from aqt import mw
 from aqt.qt import *
 from aqt.utils import restoreGeom, saveGeom
+
+
+def can_access_geom_data() -> bool:
+    return bool(mw and mw.pm.profile)
 
 
 class AnkiSaveAndRestoreGeomDialog(QDialog):
@@ -22,13 +28,13 @@ class AnkiSaveAndRestoreGeomDialog(QDialog):
         return super().exec()
 
     def _restore_geom(self) -> None:
-        if not mw:
+        if not can_access_geom_data():
             return
         restoreGeom(self, self.name, adjustSize=True)
         print(f"restored geom for {self.name}")
 
     def _save_geom(self) -> None:
-        if not mw:
+        if not can_access_geom_data():
             return
         saveGeom(self, self.name)
         print(f"saved geom for {self.name}")
