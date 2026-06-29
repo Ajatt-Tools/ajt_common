@@ -2,6 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 import abc
+import typing
 from collections.abc import Callable, Iterable
 from typing import Any, Optional, cast
 
@@ -44,6 +45,12 @@ class MgrPropMixIn:
         """Anki's ConfigEditor requires this property."""
         assert mw
         return mw.addonManager
+
+
+class NumericValue(typing.NamedTuple):
+    value: float | int
+    cfg_key: str
+    default: float | int
 
 
 class AddonConfigABC(abc.ABC):
@@ -96,6 +103,19 @@ class AddonConfigABC(abc.ABC):
         """Return all toggleable keys and values in the config."""
         for key in self.bool_keys():
             yield key, self[key]
+
+    def numerics(self) -> Iterable[NumericValue]:
+        for key, default_value in self.default_config.items():
+            if isinstance(default_value, bool):
+                # bool is a subclass of int in Python, so check it explicitly.
+                continue
+            if not isinstance(default_value, (float, int)):
+                continue
+            yield NumericValue(
+                cfg_key=key,
+                value=self[key],
+                default=default_value,
+            )
 
     def update(self, another: dict[str, Any], clear_old: bool = False) -> None:
         self._raise_if_redundant_keys(another)
