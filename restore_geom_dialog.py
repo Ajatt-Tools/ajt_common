@@ -23,6 +23,10 @@ class AnkiSaveAndRestoreGeomDialog(QDialog):
         assert isinstance(self.name, str) and self.name, "Dialog name must be set."
         self._restore_geom()
 
+    def show(self) -> None:
+        super().show()
+        self._restore_geom()
+
     def exec(self) -> int:
         self._restore_geom()
         return super().exec()
