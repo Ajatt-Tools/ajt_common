@@ -13,7 +13,7 @@ class EnumSelectCombo(QComboBox):
     def __init__(
         self,
         enum_type: enum.EnumMeta | None = None,
-        initial_value: Union[enum.Enum, str, None] = None,
+        initial_value: enum.Enum | str | None = None,
         show_values: bool = False,
         parent=None,
     ) -> None:
@@ -28,7 +28,7 @@ class EnumSelectCombo(QComboBox):
         if initial_value is not None:
             self.setCurrentName(initial_value)
 
-    def setCurrentName(self, name: Union[enum.Enum, str]) -> None:
+    def setCurrentName(self, name: enum.Enum | str) -> None:
         for index in range(self.count()):
             if self.itemData(index) == name or self.itemData(index).name == name:
                 return self.setCurrentIndex(index)

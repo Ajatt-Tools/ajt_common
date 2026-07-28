@@ -127,7 +127,7 @@ class CheckableComboBox(QComboBox):
         for item in self.items():
             item.setCheckState(Qt.CheckState.Checked if (item.text() in texts) else Qt.CheckState.Unchecked)
 
-    def setCheckedData(self, data_items: Union[Sequence[Any], enum.Flag]) -> None:
+    def setCheckedData(self, data_items: Sequence[Any] | enum.Flag) -> None:
         for item in self.items():
             item.setCheckState(Qt.CheckState.Checked if (item.data() in data_items) else Qt.CheckState.Unchecked)
 
