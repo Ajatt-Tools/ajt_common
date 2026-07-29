@@ -61,13 +61,13 @@ class AboutDialog(QDialog):
         return webview
 
     def make_button_box(self) -> QLayout:
-        def ok() -> None:
+        def ok() -> QPushButton:
             but = QPushButton("Ok")
             qconnect(but.clicked, self.accept)
             but.setFixedHeight(BUTTON_HEIGHT)
             return but
 
-        def community() -> None:
+        def community() -> QPushButton:
             but = QPushButton("Join our community")
             qconnect(but.clicked, lambda: openLink(COMMUNITY_LINK))
             but.setIcon(QIcon(CHAT_ICON_PATH))
@@ -75,7 +75,7 @@ class AboutDialog(QDialog):
             but.setFixedHeight(BUTTON_HEIGHT)
             return but
 
-        def donate() -> None:
+        def donate() -> QPushButton:
             but = QPushButton("Donate")
             qconnect(but.clicked, lambda: openLink(DONATE_LINK))
             but.setIcon(QIcon(DONATE_ICON_PATH))
@@ -120,7 +120,7 @@ def menu_root_entry() -> QMenu:
 
 
 def create_about_action(parent: QWidget) -> QAction:
-    def open_about_dialog() -> None:
+    def open_about_dialog() -> int:
         dialog = AboutDialog(mw)
         return dialog.exec()
 

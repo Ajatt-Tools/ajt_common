@@ -78,7 +78,7 @@ class AddonConfigABC(abc.ABC):
         else:
             self.config[key] = value
 
-    def get(self, key: str, default=None) -> Any:
+    def get(self, key: str, default: Any = None) -> Any:
         try:
             return self[key]
         except KeyError:
