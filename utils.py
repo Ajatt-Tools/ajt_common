@@ -14,7 +14,14 @@ from aqt.qt import pyqtBoundSignal, pyqtSignal
 
 
 def ui_translate(key: str) -> str:
-    return key.capitalize().replace("_", " ").replace("Html", "HTML").replace("Svg", "SVG").replace("Url", "URL")
+    return (
+        key.capitalize()
+        .replace("_", " ")
+        .replace("Html", "HTML")
+        .replace("Svg", "SVG")
+        .replace("Url", "URL")
+        .replace("Css", "CSS")
+    )
 
 
 HARDCODED_PATHS = (
