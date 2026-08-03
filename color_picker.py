@@ -6,6 +6,7 @@ from gettext import gettext as _
 from aqt.qt import *
 
 from .monospace_line_edit import MonoSpaceLineEdit
+from .utils import q_emit
 
 DEFAULT_COLOR = "black"
 
@@ -28,6 +29,8 @@ def color_to_hex_argb(color: QColor) -> str:
 
 
 class ColorEditPicker(QWidget):
+    color_changed = pyqtSignal(str)
+
     def __init__(self, initial_color: str = "", parent: QWidget | None = None) -> None:
         super().__init__(parent)
         # Create members
@@ -42,6 +45,8 @@ class ColorEditPicker(QWidget):
         b.setBaseSize(32, 22)
         # https://doc.qt.io/qt-6/qabstractbutton.html#clicked
         qconnect(b.clicked, lambda: self.choose_color())
+        # https://doc.qt.io/qt-6/qlineedit.html#textChanged
+        qconnect(self._edit.textChanged, lambda text: q_emit(self.color_changed, text))
 
     def choose_color(self) -> None:
         color = QColorDialog.getColor(
