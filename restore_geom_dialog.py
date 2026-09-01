@@ -6,6 +6,7 @@ from aqt.utils import restoreGeom, saveGeom
 
 
 def can_access_geom_data() -> bool:
+    """Return whether Anki's active profile can store dialog geometry."""
     return bool(mw and mw.pm.profile)
 
 
@@ -22,6 +23,7 @@ class AnkiSaveAndRestoreGeomDialog(QDialog):
         self._restore_geom()
 
     def show(self) -> None:
+        """Show the dialog after restoring its saved geometry."""
         super().show()
         self._restore_geom()
 

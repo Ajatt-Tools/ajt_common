@@ -48,6 +48,8 @@ class MgrPropMixIn:
 
 
 class NumericValue(typing.NamedTuple):
+    """Store a numeric config value with its key and default."""
+
     value: float | int
     cfg_key: str
     default: float | int
@@ -105,6 +107,7 @@ class AddonConfigABC(abc.ABC):
             yield key, self[key]
 
     def numerics(self) -> Iterable[NumericValue]:
+        """Yield numeric config values while excluding booleans."""
         for key, default_value in self.default_config.items():
             if isinstance(default_value, bool):
                 # bool is a subclass of int in Python, so check it explicitly.
@@ -132,6 +135,8 @@ class AddonConfigABC(abc.ABC):
 
 
 class AddonConfigManagerError(RuntimeError):
+    """Report an invalid AddonConfigManager operation."""
+
     pass
 
 
@@ -156,6 +161,7 @@ class AddonConfigManager(AddonConfigABC):
 
     @classmethod
     def clone(cls, default: bool = False) -> "AddonConfigManager":
+        """Create a config manager that cannot write changes to disk."""
         return cls(default=default, allow_disk_writes=False)
 
     def _set_underlying_dicts(self) -> None:
