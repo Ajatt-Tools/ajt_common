@@ -47,7 +47,7 @@ class CheckableComboBox(QComboBox):
         # Prevent popup from closing when clicking on an item
         self.view().viewport().installEventFilter(self)
 
-    def handle_item_pressed(self, index: int) -> None:
+    def handle_item_pressed(self, index: QModelIndex) -> None:
         """Check the pressed item if unchecked and vice-versa"""
         item: QStandardItem = self.model().itemFromIndex(index)
         if item.checkState() == Qt.CheckState.Checked:
@@ -96,7 +96,7 @@ class CheckableComboBox(QComboBox):
     def addCheckableText(self, text: str) -> None:
         return self.addCheckableItem(text)
 
-    def addCheckableItem(self, text: str, data=MISSING) -> None:
+    def addCheckableItem(self, text: str, data: Any = MISSING) -> None:
         item = QStandardItem()
         item.setText(text)
         item.setCheckable(True)
