@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from collections.abc import Iterable
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 
 from aqt.qt import *
 

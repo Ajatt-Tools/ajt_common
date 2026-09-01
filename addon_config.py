@@ -4,7 +4,7 @@
 import abc
 import typing
 from collections.abc import Callable, Iterable
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 import aqt
 from aqt import mw

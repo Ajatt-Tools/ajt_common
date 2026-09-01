@@ -7,7 +7,6 @@ import pathlib
 import shutil
 import subprocess
 from collections.abc import Callable
-from typing import Optional, Union
 
 from anki.utils import no_bundled_libs
 from aqt.qt import pyqtBoundSignal, pyqtSignal

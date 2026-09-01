@@ -2,7 +2,6 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 import enum
-from typing import Optional
 
 from aqt.qt import *
 
