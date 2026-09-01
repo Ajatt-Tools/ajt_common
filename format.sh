@@ -11,7 +11,7 @@ EXCLUDED=()
 INCLUDED=()
 
 die_if_no_arg() {
-	if [[ $# -eq 0 ]]; then
+	if [[ $# -lt 2 ]]; then
 		echo "Missing path for $1"
 		exit 1
 	fi
@@ -22,15 +22,15 @@ read_cmd_args() {
 	while (($# > 0)); do
 		case $1 in
 		-e|--exclude)
-			shift
 			die_if_no_arg "$@"
+			shift
 			fp="${ROOT_DIR%%/}/${1%%/}"
 			EXCLUDED+=("$fp")
 			echo "exclude $fp"
 			;;
 		-i|--include)
-			shift
 			die_if_no_arg "$@"
+			shift
 			fp="${ROOT_DIR%%/}/${1%%/}"
 			INCLUDED+=("$fp")
 			echo "include $fp"
