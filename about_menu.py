@@ -17,6 +17,7 @@ from .consts import (
     DONATE_LINK,
     ICON_SIDE_LEN,
 )
+from .restore_geom_dialog import AnkiSaveAndRestoreGeomDialog
 
 
 def garbage_collect_on_dialog_finish(dialog: QDialog) -> None:
@@ -42,7 +43,9 @@ def tweak_window(dialog: QDialog) -> None:
     disable_help_button(dialog)
 
 
-class AboutDialog(QDialog):
+class AboutDialog(AnkiSaveAndRestoreGeomDialog):
+    name: str = "ajt__about_dialog"
+
     def __init__(self, parent: QWidget, *args, **kwargs) -> None:
         super().__init__(parent=parent or mw, *args, **kwargs)
         tweak_window(self)
@@ -55,6 +58,7 @@ class AboutDialog(QDialog):
     def make_about_webview(self, html_content: str) -> AnkiWebView:
         webview = AnkiWebView(parent=self)
         webview.setProperty("url", QUrl("about:blank"))
+        webview.setObjectName(self.name)
         webview.stdHtml(html_content, js=[])
         webview.setMinimumSize(480, 320)
         webview.disable_zoom()
