@@ -17,23 +17,30 @@ die_if_no_arg() {
 	fi
 }
 
+# Record a validated path while keeping include/exclude parsing in one place.
+add_format_path() {
+	local flag=$1
+	local fp="${ROOT_DIR%%/}/${2%%/}"
+	case $flag in
+	-i|--include)
+		INCLUDED+=("$fp")
+		echo "include $fp"
+		;;
+	-e|--exclude)
+		EXCLUDED+=("$fp")
+		echo "exclude $fp"
+		;;
+	esac
+}
+
+# Consume option/path pairs without duplicating validation and path normalization.
 read_cmd_args() {
-	local fp
 	while (($# > 0)); do
 		case $1 in
-		-e|--exclude)
+		-e|--exclude|-i|--include)
 			die_if_no_arg "$@"
-			shift
-			fp="${ROOT_DIR%%/}/${1%%/}"
-			EXCLUDED+=("$fp")
-			echo "exclude $fp"
-			;;
-		-i|--include)
-			die_if_no_arg "$@"
-			shift
-			fp="${ROOT_DIR%%/}/${1%%/}"
-			INCLUDED+=("$fp")
-			echo "include $fp"
+			add_format_path "$1" "$2"
+			shift 2
 			;;
 		"")
 			break
@@ -43,7 +50,6 @@ read_cmd_args() {
 			exit 1
 			;;
 		esac
-		shift
 	done
 	readonly -a EXCLUDED INCLUDED
 }
