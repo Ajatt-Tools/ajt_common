@@ -67,7 +67,9 @@ class AboutDialog(AnkiSaveAndRestoreGeomDialog):
     def make_button_box(self) -> QLayout:
         def ok() -> QPushButton:
             but = QPushButton("Ok")
-            qconnect(but.clicked, self.accept)
+            # The geometry-aware Python method must not receive QPushButton's checked flag.
+            # https://doc.qt.io/qt-6/qabstractbutton.html#clicked
+            qconnect(but.clicked, lambda: self.accept())
             but.setFixedHeight(BUTTON_HEIGHT)
             return but
 
@@ -132,5 +134,7 @@ def create_about_action(parent: QWidget) -> QAction:
     # Note: set menu role to prevent Anki from repositioning the menu on macOS.
     # This is a known issue that occasionally occurs with some add-ons and macOS.
     action.setMenuRole(QAction.MenuRole.NoRole)
-    qconnect(action.triggered, open_about_dialog)
+    # QAction's checked flag is unrelated to creating the dialog.
+    # https://doc.qt.io/qt-6/qaction.html#triggered
+    qconnect(action.triggered, lambda: open_about_dialog())
     return action

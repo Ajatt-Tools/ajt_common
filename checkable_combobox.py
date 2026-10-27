@@ -39,7 +39,9 @@ class CheckableComboBox(QComboBox):
         qconnect(self.view().pressed, self.handle_item_pressed)
 
         # Update the text when an item is toggled
-        qconnect(self.model().dataChanged, self.updateText)
+        # Model notifications carry indices and roles, not arguments for the text refresh.
+        # https://doc.qt.io/qt-6/qabstractitemmodel.html#dataChanged
+        qconnect(self.model().dataChanged, lambda: self.updateText())
 
         # Hide and show popup when clicking the line edit
         self.lineEdit().installEventFilter(self)
