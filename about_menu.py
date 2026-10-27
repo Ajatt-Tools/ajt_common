@@ -65,14 +65,6 @@ class AboutDialog(AnkiSaveAndRestoreGeomDialog):
         return webview
 
     def make_button_box(self) -> QLayout:
-        def ok() -> QPushButton:
-            but = QPushButton("Ok")
-            # The geometry-aware Python method must not receive QPushButton's checked flag.
-            # https://doc.qt.io/qt-6/qabstractbutton.html#clicked
-            qconnect(but.clicked, lambda: self.accept())
-            but.setFixedHeight(BUTTON_HEIGHT)
-            return but
-
         def community() -> QPushButton:
             but = QPushButton("Join our community")
             qconnect(but.clicked, lambda: openLink(COMMUNITY_LINK))
@@ -90,12 +82,21 @@ class AboutDialog(AnkiSaveAndRestoreGeomDialog):
             return but
 
         but_box = QHBoxLayout()
-        but_box.addWidget(ok())
+        but_box.addWidget(self._make_ok_button())
         but_box.addStretch()
         but_box.addWidget(community())
         but_box.addWidget(donate())
 
         return but_box
+
+    def _make_ok_button(self) -> QPushButton:
+        """Create the close button without passing Qt's checked flag to accept."""
+        but = QPushButton("Ok")
+        # The geometry-aware Python method must not receive QPushButton's checked flag.
+        # https://doc.qt.io/qt-6/qabstractbutton.html#clicked
+        qconnect(but.clicked, lambda: self.accept())
+        but.setFixedHeight(BUTTON_HEIGHT)
+        return but
 
     def make_root_layout(self) -> QLayout:
         root_layout = QVBoxLayout()
