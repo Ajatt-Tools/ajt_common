@@ -65,27 +65,12 @@ class AboutDialog(AnkiSaveAndRestoreGeomDialog):
         return webview
 
     def make_button_box(self) -> QLayout:
-        def community() -> QPushButton:
-            but = QPushButton("Join our community")
-            qconnect(but.clicked, lambda: openLink(COMMUNITY_LINK))
-            but.setIcon(QIcon(CHAT_ICON_PATH))
-            but.setIconSize(QSize(ICON_SIDE_LEN, ICON_SIDE_LEN))
-            but.setFixedHeight(BUTTON_HEIGHT)
-            return but
-
-        def donate() -> QPushButton:
-            but = QPushButton("Donate")
-            qconnect(but.clicked, lambda: openLink(DONATE_LINK))
-            but.setIcon(QIcon(DONATE_ICON_PATH))
-            but.setIconSize(QSize(ICON_SIDE_LEN, ICON_SIDE_LEN))
-            but.setFixedHeight(BUTTON_HEIGHT)
-            return but
-
+        """Arrange the close button and shared community and donation links."""
         but_box = QHBoxLayout()
         but_box.addWidget(self._make_ok_button())
         but_box.addStretch()
-        but_box.addWidget(community())
-        but_box.addWidget(donate())
+        but_box.addWidget(self._make_community_button())
+        but_box.addWidget(self._make_donate_button())
 
         return but_box
 
@@ -95,6 +80,26 @@ class AboutDialog(AnkiSaveAndRestoreGeomDialog):
         # The geometry-aware Python method must not receive QPushButton's checked flag.
         # https://doc.qt.io/qt-6/qabstractbutton.html#clicked
         qconnect(but.clicked, lambda: self.accept())
+        but.setFixedHeight(BUTTON_HEIGHT)
+        return but
+
+    def _make_community_button(self) -> QPushButton:
+        """Create the button for joining the Ajatt-Tools community."""
+        return self._make_link_button("Join our community", link=COMMUNITY_LINK, icon_path=CHAT_ICON_PATH)
+
+    def _make_donate_button(self) -> QPushButton:
+        """Create the button for supporting Ajatt-Tools development."""
+        return self._make_link_button("Donate", link=DONATE_LINK, icon_path=DONATE_ICON_PATH)
+
+    @staticmethod
+    def _make_link_button(text: str, *, link: str, icon_path: str) -> QPushButton:
+        """Create a consistently styled button that opens its configured link."""
+        but = QPushButton(text)
+        # Discard clicked's checked flag. The destination is fixed for this button.
+        # https://doc.qt.io/qt-6/qabstractbutton.html#clicked
+        qconnect(but.clicked, lambda: openLink(link))
+        but.setIcon(QIcon(icon_path))
+        but.setIconSize(QSize(ICON_SIDE_LEN, ICON_SIDE_LEN))
         but.setFixedHeight(BUTTON_HEIGHT)
         return but
 
