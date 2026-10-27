@@ -56,8 +56,7 @@ read_cmd_args() {
 			;;
 		esac
 	done
-	readonly -a EXCLUDED INCLUDED
-	readonly CHECK
+	readonly CHECK EXCLUDED INCLUDED
 }
 
 is_excluded() {
