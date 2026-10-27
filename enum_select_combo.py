@@ -9,6 +9,8 @@ from .utils import ui_translate
 
 
 class EnumSelectCombo(QComboBox):
+    """Store enum members as combo-box data while displaying their names or values."""
+
     def __init__(
         self,
         enum_type: enum.EnumMeta | None = None,
@@ -16,6 +18,7 @@ class EnumSelectCombo(QComboBox):
         show_values: bool = False,
         parent=None,
     ) -> None:
+        """Populate the enum choices and select an optional initial member or name."""
         super().__init__(parent)
         if enum_type is None:
             assert isinstance(initial_value, enum.Enum)
@@ -28,6 +31,7 @@ class EnumSelectCombo(QComboBox):
             self.setCurrentName(initial_value)
 
     def setCurrentName(self, name: enum.Enum | str) -> None:
+        """Select the matching member or name, leaving the selection unchanged when none matches."""
         for index in range(self.count()):
             if self.itemData(index) == name or self.itemData(index).name == name:
                 return self.setCurrentIndex(index)

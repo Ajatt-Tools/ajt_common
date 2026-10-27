@@ -16,7 +16,10 @@ MISSING = object()
 
 
 class CheckableComboBox(QComboBox):
+    """Allow multiple checked selections while displaying their labels in the line edit."""
+
     def __init__(self, *args, **kwargs) -> None:
+        """Install checkable-item handling and refresh the display after model changes."""
         super().__init__(*args, **kwargs)
 
         # Initial state
@@ -93,9 +96,11 @@ class CheckableComboBox(QComboBox):
         self._opened = False
 
     def updateText(self) -> None:
+        """Refresh the displayed text from the currently checked items."""
         self.lineEdit().setText(", ".join(self.checkedTexts()))
 
     def addCheckableText(self, text: str) -> None:
+        """Append an unchecked item whose text is also its user-visible label."""
         return self.addCheckableItem(text)
 
     def addCheckableItem(self, text: str, data: Any = MISSING) -> None:
@@ -126,10 +131,12 @@ class CheckableComboBox(QComboBox):
         return tuple(item.text() for item in self.checkedItems())
 
     def setCheckedTexts(self, texts: Sequence[str]) -> None:
+        """Check items with matching labels and clear every other check state."""
         for item in self.items():
             item.setCheckState(Qt.CheckState.Checked if (item.text() in texts) else Qt.CheckState.Unchecked)
 
     def setCheckedData(self, data_items: Sequence[Any] | enum.Flag) -> None:
+        """Check items selected by their stored data or membership in an enum flag."""
         for item in self.items():
             item.setCheckState(Qt.CheckState.Checked if (item.data() in data_items) else Qt.CheckState.Unchecked)
 
@@ -165,6 +172,7 @@ class ChkComboTryWindow(QDialog):
 
 
 def main() -> None:
+    """Run the standalone checkable-combobox demonstration."""
     app = QApplication(sys.argv)
     window = ChkComboTryWindow()
     window.show()

@@ -29,6 +29,7 @@ def place_widgets_in_grid(
     n_columns: int = 2,
     alignment: Qt.AlignmentFlag | None = Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
 ) -> QGridLayout:
+    """Arrange widgets in a grid with the requested column count and optional alignment."""
     grid = QGridLayout()
     if alignment is not None:
         grid.setAlignment(alignment)

@@ -56,6 +56,8 @@ class NumericValue(typing.NamedTuple):
 
 
 class AddonConfigABC(abc.ABC):
+    """Define config lookup, enumeration, and update operations for managers and subviews."""
+
     @property
     @abc.abstractmethod
     def config(self) -> dict:
@@ -67,6 +69,7 @@ class AddonConfigABC(abc.ABC):
         raise NotImplementedError()
 
     def __getitem__(self, key: str) -> Any:
+        """Return a configured value or its default, raising KeyError for unknown keys."""
         if key in self.default_config:
             return self.config.get(key, self.default_config[key])
         else:
@@ -81,6 +84,7 @@ class AddonConfigABC(abc.ABC):
             self.config[key] = value
 
     def get(self, key: str, default: Any = None) -> Any:
+        """Return a config value, falling back to the supplied value for unknown keys."""
         try:
             return self[key]
         except KeyError:
@@ -127,6 +131,7 @@ class AddonConfigABC(abc.ABC):
         self.config.update(another)
 
     def _raise_if_redundant_keys(self, new_config: dict) -> None:
+        """Raise RuntimeError when an update contains keys absent from the default config."""
         if redundant_keys := [key for key in new_config if key not in self.default_config]:
             raise RuntimeError(
                 "Passed a new config with keys that aren't present in the default config: %s."
@@ -151,6 +156,7 @@ class AddonConfigManager(AddonConfigABC):
     _allow_disk_writes: bool
 
     def __init__(self, default: bool = False, *, allow_disk_writes: bool = True) -> None:
+        """Load configuration and optionally restrict the manager to defaults or disable disk writes."""
         self._allow_disk_writes = allow_disk_writes
         self._set_underlying_dicts()
         if default:
@@ -204,6 +210,7 @@ class AddonConfigManager(AddonConfigABC):
         return copy.deepcopy(self.config)
 
     def write_config(self) -> None:
+        """Persist config, raising AddonConfigManagerError for defaults or write-protected managers."""
         if self.is_default:
             raise AddonConfigManagerError("Can't write default config.")
         if not self._allow_disk_writes:
@@ -220,6 +227,7 @@ class ConfigSubViewBase(AddonConfigABC):
     _manager: AddonConfigABC
 
     def __init__(self, manager: AddonConfigABC, view_key: str | None = None) -> None:
+        """Select a nested config section, raising ValueError when no section key is available."""
         self._view_key = view_key or self._view_key
         if not self._view_key:
             raise ValueError("view key must be set.")
@@ -236,4 +244,5 @@ class ConfigSubViewBase(AddonConfigABC):
         return self._manager.default_config[self._view_key]
 
     def write_config(self) -> None:
+        """Reject direct writes because only the owning manager can persist a subview."""
         raise AddonConfigManagerError("Can't call this function from a sub-view.")

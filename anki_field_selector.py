@@ -13,6 +13,7 @@ class EditableSelector(QComboBox):
     """
 
     def __init__(self, parent: QWidget | None = None) -> None:
+        """Create a combo box that also accepts a manually entered value."""
         super().__init__(parent)
         self.setEditable(True)
 
@@ -24,6 +25,7 @@ class AnkiFieldSelector(EditableSelector):
     """
 
     def __init__(self, initial_value: str | None = None, parent: QWidget | None = None) -> None:
+        """Populate field suggestions from Anki when available and preserve the supplied initial value."""
         super().__init__(parent)
         self.clear()
         try:

@@ -6,6 +6,7 @@ from aqt.qt import *
 
 
 def mod_mask_qt6() -> Qt.KeyboardModifier:
+    """Return the combined mask of modifiers supported by shortcut capture."""
     return (
         Qt.KeyboardModifier.ControlModifier
         | Qt.KeyboardModifier.AltModifier
@@ -15,6 +16,7 @@ def mod_mask_qt6() -> Qt.KeyboardModifier:
 
 
 def forbidden_keys() -> Sequence[Qt.Key]:
+    """Return modifier-only keys that cannot form a shortcut by themselves."""
     return (
         Qt.Key.Key_Shift,
         Qt.Key.Key_Alt,
@@ -32,6 +34,8 @@ def to_int(modifiers: Qt.KeyboardModifier) -> int:
 
 
 class KeyPressDialog(QDialog):
+    """Capture a shortcut or clear it when Escape is pressed."""
+
     value_accepted = pyqtSignal(str)
 
     def __init__(self, parent: QWidget | None = None, initial_value: str | None = None, *args, **kwargs) -> None:
@@ -55,10 +59,12 @@ class KeyPressDialog(QDialog):
         return layout
 
     def _accept_value(self, value: str | None) -> None:
+        """Publish the captured shortcut and close the dialog with an accepted result."""
         self.set_value(value)
         self.accept()
 
     def set_value(self, value: str | None) -> None:
+        """Store the shortcut, using None for an unassigned value, and notify listeners."""
         self._shortcut = value
         self.value_accepted.emit(value)  # type: ignore
 
@@ -74,10 +80,13 @@ class KeyPressDialog(QDialog):
             self._accept_value(QKeySequence(to_int(modifiers) + key).toString())
 
     def value(self) -> str | None:
+        """Return the stored shortcut or None when no shortcut is assigned."""
         return self._shortcut
 
 
 class ShortCutGrabButton(QPushButton):
+    """Open shortcut capture and display a placeholder for an unassigned shortcut."""
+
     _placeholder = "[Not assigned]"
 
     def __init__(self, initial_value: str | None = None) -> None:
@@ -91,6 +100,7 @@ class ShortCutGrabButton(QPushButton):
         )
 
     def setValue(self, value: str) -> None:
+        """Set the shortcut and update the visible button label through the dialog's notification."""
         self._dialog.set_value(value)
 
     def value(self) -> str:

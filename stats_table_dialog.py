@@ -13,9 +13,12 @@ class StatsTableError(RuntimeError):
 
 
 class StatsTable(QTableWidget):
+    """Display read-only statistics with named columns."""
+
     _column_names: Sequence[str]
 
     def __init__(self, column_names: Sequence[str], parent: QWidget | None = None) -> None:
+        """Initialize the statistics table with the supplied column labels."""
         super().__init__(parent)
         self._column_names = column_names
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
@@ -33,6 +36,8 @@ class StatsTable(QTableWidget):
 
 
 class StatsDialog(AnkiSaveAndRestoreGeomDialog):
+    """Present a statistics table in a geometry-aware dialog."""
+
     name: str
     win_title: str
     button_box_buttons: QDialogButtonBox.StandardButton = QDialogButtonBox.StandardButton.Ok
@@ -41,6 +46,7 @@ class StatsDialog(AnkiSaveAndRestoreGeomDialog):
     _button_box: QDialogButtonBox
 
     def __init__(self, column_names: Sequence[str], parent: QWidget | None = None) -> None:
+        """Build the table and dialog controls using the supplied columns."""
         super().__init__(parent=parent)
         # Members
         self._layout = QVBoxLayout()

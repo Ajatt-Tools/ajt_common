@@ -29,9 +29,12 @@ def color_to_hex_argb(color: QColor) -> str:
 
 
 class ColorEditPicker(QWidget):
+    """Combine color text entry and a picker, forwarding text changes through color_changed."""
+
     color_changed = pyqtSignal(str)
 
     def __init__(self, initial_color: str = "", parent: QWidget | None = None) -> None:
+        """Build the text field and picker button with an optional initial color."""
         super().__init__(parent)
         # Create members
         self._edit = ColorEdit()
@@ -46,6 +49,7 @@ class ColorEditPicker(QWidget):
         # https://doc.qt.io/qt-6/qabstractbutton.html#clicked
         qconnect(b.clicked, lambda: self.choose_color())
         # https://doc.qt.io/qt-6/qlineedit.html#textChanged
+        # Forward the new text unchanged so callers can react without accessing the internal edit.
         qconnect(self._edit.textChanged, lambda text: q_emit(self.color_changed, text))
 
     def choose_color(self) -> None:

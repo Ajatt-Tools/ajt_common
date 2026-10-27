@@ -20,10 +20,13 @@ MONO_FONT_FAMILIES = (
 
 
 class MonoSpaceLineEdit(QLineEdit):
+    """Display text with a cross-platform fallback list of monospace font families."""
+
     font_size = 14
     min_height = 32
 
     def __init__(self, *args, **kwargs) -> None:
+        """Apply the shared monospace font preferences and minimum input height."""
         super().__init__(*args, **kwargs)
         font = self.font()
         font.setFamilies(MONO_FONT_FAMILIES)

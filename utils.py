@@ -13,6 +13,7 @@ from aqt.qt import pyqtBoundSignal, pyqtSignal
 
 
 def ui_translate(key: str) -> str:
+    """Turn a configuration key into a label while preserving common technical abbreviations."""
     return (
         key.capitalize()
         .replace("_", " ")
@@ -33,6 +34,7 @@ HARDCODED_PATHS = (
 
 
 def find_executable_hardcoded(name: str) -> str | None:
+    """Return the first existing fallback executable path, or None when no candidate exists."""
     for path_to_dir in HARDCODED_PATHS:
         if os.path.isfile(path_to_exe := os.path.join(path_to_dir, name)):
             return path_to_exe
@@ -90,6 +92,7 @@ def open_file(path: str | pathlib.Path) -> None:
 
 
 def main() -> None:
+    """Print executable-discovery results for the standalone diagnostic entry point."""
     print("distutils", shutil.which("anki"))
     print("hardcoded", find_executable_hardcoded("anki"))
     print("all", find_executable("anki"))

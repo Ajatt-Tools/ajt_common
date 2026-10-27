@@ -21,6 +21,7 @@ from .restore_geom_dialog import AnkiSaveAndRestoreGeomDialog
 
 
 def garbage_collect_on_dialog_finish(dialog: QDialog) -> None:
+    """Register the dialog for cleanup when supported by the active Anki window."""
     try:
         mw.garbage_collect_on_dialog_finish(dialog)
     except AttributeError:
@@ -30,6 +31,7 @@ def garbage_collect_on_dialog_finish(dialog: QDialog) -> None:
 
 
 def disable_help_button(dialog: QDialog) -> None:
+    """Hide the dialog help button on Anki versions that expose the helper."""
     try:
         from aqt.utils import disable_help_button as _disable_help_button
 
@@ -44,9 +46,12 @@ def tweak_window(dialog: QDialog) -> None:
 
 
 class AboutDialog(AnkiSaveAndRestoreGeomDialog):
+    """Display shared add-on information while preserving the dialog's geometry."""
+
     name: str = "ajt__about_dialog"
 
     def __init__(self, parent: QWidget, *args, **kwargs) -> None:
+        """Build the shared About window using the supplied Anki parent."""
         super().__init__(parent=parent or mw, *args, **kwargs)
         tweak_window(self)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
@@ -56,6 +61,7 @@ class AboutDialog(AnkiSaveAndRestoreGeomDialog):
         self.setLayout(self.make_root_layout())
 
     def make_about_webview(self, html_content: str) -> AnkiWebView:
+        """Create the named, nonzoomable webview used for the About message."""
         webview = AnkiWebView(parent=self)
         webview.setProperty("url", QUrl("about:blank"))
         webview.setObjectName(self.name)
@@ -132,7 +138,10 @@ def menu_root_entry() -> QMenu:
 
 
 def create_about_action(parent: QWidget) -> QAction:
+    """Create a menu action that opens the modal About dialog."""
+
     def open_about_dialog() -> int:
+        """Open the dialog and return its modal result."""
         dialog = AboutDialog(mw)
         return dialog.exec()
 

@@ -9,6 +9,8 @@ from .checkable_combobox import CheckableComboBox
 
 
 class MultipleChoiceSelector(QGroupBox):
+    """Enable an optional group of checked choices through the group-box toggle."""
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._combo = CheckableComboBox()
@@ -20,6 +22,7 @@ class MultipleChoiceSelector(QGroupBox):
         qconnect(self.toggled, self._react_to_toggle)
 
     def _react_to_toggle(self, on: bool) -> None:
+        """Show the choices only while their containing group is enabled."""
         self._combo.setHidden(not on)
 
     def setChecked(self, on: bool) -> None:
@@ -27,12 +30,14 @@ class MultipleChoiceSelector(QGroupBox):
         return super().setChecked(on)
 
     def set_texts(self, fields: Iterable[str]) -> None:
+        """Replace the available choices with the supplied labels."""
         return self._combo.setCheckableTexts(fields)
 
     def checked_texts(self) -> list[str]:
         return list(self._combo.checkedTexts()) if self.isChecked() else []
 
     def set_checked_texts(self, fields: list[str] | None) -> None:
+        """Enable and select nonempty choices, or disable the group for empty input."""
         if fields:
             self.setChecked(True)
             self._combo.setCheckedTexts(fields)

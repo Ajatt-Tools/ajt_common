@@ -32,12 +32,14 @@ class AnkiSaveAndRestoreGeomDialog(QDialog):
         return super().exec()
 
     def _restore_geom(self) -> None:
+        """Restore saved geometry only while an Anki profile is available."""
         if not can_access_geom_data():
             return
         restoreGeom(self, self.name, adjustSize=True)
         print(f"restored geom for {self.name}")
 
     def _save_geom(self) -> None:
+        """Save current geometry only while an Anki profile is available."""
         if not can_access_geom_data():
             return
         saveGeom(self, self.name)
