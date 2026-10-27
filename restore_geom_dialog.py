@@ -23,7 +23,7 @@ class AnkiSaveAndRestoreGeomDialog(QDialog):
         self._restore_geom()
 
     def show(self) -> None:
-        """Show the dialog after restoring its saved geometry."""
+        """Show the dialog, then restore its saved geometry."""
         super().show()
         self._restore_geom()
 
