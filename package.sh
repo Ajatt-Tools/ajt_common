@@ -18,6 +18,18 @@ declare \
 
 declare zip_name
 
+# Keep failures separate from normal packaging progress.
+die() {
+	echo "oops: $*" >&2
+	exit 1
+}
+
+# Ignored build artifacts are fine, but uncommitted files and dirty submodules are not.
+# https://git-scm.com/docs/git-status#_porcelain_format_version_1
+git_no_differences() {
+	[[ -z $(git status --porcelain --untracked-files=normal --ignore-submodules=none || echo error) ]]
+}
+
 check_tools_installed() {
 	for exe in git zip zipmerge; do
 		if ! command -v "$exe" >/dev/null; then
@@ -109,10 +121,11 @@ read_cmd_args() {
 main() {
 	check_tools_installed
 
-	rm -v -- ./*.ankiaddon 2>/dev/null || true
-
 	read_cmd_args "$@"
 	check_correct_cwd
+	git_no_differences || die "work tree is dirty"
+
+	rm -v -- ./*.ankiaddon 2>/dev/null || true
 
 	if [[ -z $name ]] || [[ $name == unknown ]]; then
 		echo -e "${RED}Name is not set${NC}"
