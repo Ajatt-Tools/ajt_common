@@ -101,7 +101,8 @@ run_format_tools() {
 		isort --check-only --diff "${TO_FORMAT[@]}"
 		return
 	fi
-	pyupgrade --py310-plus "${TO_FORMAT[@]}"
+	# Successful rewrites must not stop fix mode before isort and Black run.
+	pyupgrade --exit-zero-even-if-changed --py310-plus "${TO_FORMAT[@]}"
 	isort "${TO_FORMAT[@]}"
 	black --line-length 120 --target-version py310 "${TO_FORMAT[@]}"
 }
