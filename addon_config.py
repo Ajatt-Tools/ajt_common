@@ -3,6 +3,8 @@
 
 import abc
 import typing
+# Callable from collections.abc keeps runtime checks free of deprecated typing aliases on Python 3.10.
+# https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable
 from collections.abc import Callable, Iterable
 from typing import Any, cast
 
