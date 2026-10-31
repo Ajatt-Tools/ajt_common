@@ -85,10 +85,14 @@ exit_if_tools_not_installed() {
 collect_format_files() {
 	if [[ ${#INCLUDED[@]} -eq 0 ]]; then
 		# included list is not provided
-		readarray -t FILES <<<"$(find "$ROOT_DIR" -iname '*.py')"
+		mapfile -d '' -t FILES < <(find "$ROOT_DIR" -iname '*.py' -print0)
 	else
-		readarray -t FILES <<<"$(find "${INCLUDED[@]}" -iname '*.py')"
+		mapfile -d '' -t FILES < <(find "${INCLUDED[@]}" -iname '*.py' -print0)
 	fi
+	# NUL-separated output preserves filenames with newlines. Wait for the asynchronous producer too.
+	# https://www.gnu.org/software/bash/manual/html_node/Process-Substitution.html
+	local -r find_pid=$!
+	wait "$find_pid" || die "find returned a non-zero exit code"
 	readonly -a FILES
 }
 
