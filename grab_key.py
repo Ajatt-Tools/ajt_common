@@ -49,7 +49,7 @@ class KeyPressDialog(QDialog):
     @staticmethod
     def _make_layout() -> QLayout:
         label = QLabel(
-            "Please press the key combination you would like to assign.\n"
+            "Please press the key or key combination you would like to assign.\n"
             "Supported modifiers: CTRL, ALT, SHIFT or META.\n"
             "Press ESC to delete the shortcut."
         )
@@ -76,7 +76,7 @@ class KeyPressDialog(QDialog):
 
         if key == Qt.Key.Key_Escape:
             self._accept_value(None)
-        elif modifiers and modifiers_allowed(modifiers) and key > 0 and key not in forbidden_keys():
+        elif modifiers_allowed(modifiers) and key > 0 and key not in forbidden_keys():
             self._accept_value(QKeySequence(to_int(modifiers) + key).toString())
 
     def value(self) -> str | None:
