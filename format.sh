@@ -11,10 +11,15 @@ EXCLUDED=()
 INCLUDED=()
 CHECK=false
 
+# Stop the whole script with an error message.
+die() {
+	echo "$*" >&2
+	exit 1
+}
+
 die_if_no_arg() {
 	if [[ $# -lt 2 ]]; then
-		echo "Missing path for $1"
-		exit 1
+		die "Missing path for $1"
 	fi
 }
 
@@ -51,8 +56,7 @@ read_cmd_args() {
 			break
 			;;
 		*)
-			echo "Unknown command: '$1'"
-			exit 1
+			die "Unknown command: '$1'"
 			;;
 		esac
 	done
@@ -72,8 +76,7 @@ is_excluded() {
 exit_if_tools_not_installed() {
 	for prog in pyupgrade isort black; do
 		if ! [[ -x $(command -v "$prog") ]]; then
-			echo "command not found: $prog"
-			exit 1
+			die "command not found: $prog"
 		fi
 	done
 }
@@ -92,8 +95,7 @@ collect_format_files() {
 # Bash's dynamic scope exposes the caller's local TO_FORMAT array without copying file paths.
 run_format_tools() {
 	if [[ ${#TO_FORMAT[@]} -eq 0 ]]; then
-		echo "No Python files found."
-		return
+		die "No Python files found."
 	fi
 	# Check mode must never run pyupgrade because it rewrites files in place.
 	if $CHECK; then
@@ -113,8 +115,7 @@ main() {
 	read_cmd_args "$@"
 	collect_format_files
 	if [[ ${#FILES[@]} -eq 0 ]] || [[ -z "${FILES[0]}" ]]; then
-		echo "No Python files found."
-		exit 0
+		die "No Python files found."
 	fi
 	for file in "${FILES[@]}"; do
 		if is_excluded "$file"; then
