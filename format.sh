@@ -114,6 +114,9 @@ run_format_tools() {
 }
 
 main() {
+	# Run from the root.
+	cd -- "$ROOT_DIR" || die "can't cd to the root directory"
+
 	exit_if_tools_not_installed
 	local TO_FORMAT=()
 	read_cmd_args "$@"
