@@ -137,14 +137,14 @@ def menu_root_entry() -> QMenu:
     return mw.form.ajt_root_menu
 
 
+def open_about_dialog() -> int:
+    """Open the dialog and return its modal result."""
+    dialog = AboutDialog(mw)
+    return dialog.exec()
+
+
 def create_about_action(parent: QWidget) -> QAction:
     """Create a menu action that opens the modal About dialog."""
-
-    def open_about_dialog() -> int:
-        """Open the dialog and return its modal result."""
-        dialog = AboutDialog(mw)
-        return dialog.exec()
-
     action = QAction(f"{DIALOG_NAME}...", parent)
     # Note: set menu role to prevent Anki from repositioning the menu on macOS.
     # This is a known issue that occasionally occurs with some add-ons and macOS.
