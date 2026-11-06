@@ -15,6 +15,13 @@ from aqt.qt import *
 MISSING = object()
 
 
+def reverse_check_state(check_state: Qt.CheckState) -> Qt.CheckState:
+    if check_state == Qt.CheckState.Checked:
+        return Qt.CheckState.Unchecked
+    else:
+        return Qt.CheckState.Checked
+
+
 class CheckableComboBox(QComboBox):
     """Allow multiple checked selections while displaying their labels in the line edit."""
 
@@ -55,10 +62,8 @@ class CheckableComboBox(QComboBox):
     def handle_item_pressed(self, index: QModelIndex) -> None:
         """Check the pressed item if unchecked and vice-versa"""
         item: QStandardItem = self.model().itemFromIndex(index)
-        if item.checkState() == Qt.CheckState.Checked:
-            # reverse checked state on click.
-            return item.setCheckState(Qt.CheckState.Unchecked)
-        return item.setCheckState(Qt.CheckState.Checked)
+        # reverse checked state on click.
+        item.setCheckState(reverse_check_state(item.checkState()))
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """Recompute text to elide as needed"""
