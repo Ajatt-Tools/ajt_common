@@ -37,12 +37,12 @@ class CheckableComboBox(QComboBox):
 
         # Make the combo editable to set a custom text, but readonly
         self.setEditable(True)
-        self.lineEdit().setReadOnly(True)
+        self._line_edit.setReadOnly(True)
 
         # Make the lineedit the same color as QPushButton
         palette = QApplication.palette()
         palette.setBrush(QPalette.ColorRole.Base, palette.button())
-        self.lineEdit().setPalette(palette)
+        self._line_edit.setPalette(palette)
 
         # Use custom delegate and model
         self.setItemDelegate(QStyledItemDelegate())
@@ -57,7 +57,7 @@ class CheckableComboBox(QComboBox):
         qconnect(self.model().dataChanged, lambda: self.updateText())
 
         # Hide and show popup when clicking the line edit
-        self.lineEdit().installEventFilter(self)
+        self._line_edit.installEventFilter(self)
 
         # Prevent popup from closing when clicking on an item
         self.view().viewport().installEventFilter(self)
@@ -105,7 +105,7 @@ class CheckableComboBox(QComboBox):
 
     def updateText(self) -> None:
         """Refresh the displayed text from the currently checked items."""
-        self.lineEdit().setText(", ".join(self.checkedTexts()))
+        self._line_edit.setText(", ".join(self.checkedTexts()))
 
     def addCheckableText(self, text: str) -> None:
         """Append an unchecked item whose text is also its user-visible label."""
@@ -147,6 +147,13 @@ class CheckableComboBox(QComboBox):
         """Check items selected by their stored data or membership in an enum flag."""
         for item in self.items():
             item.setCheckState(Qt.CheckState.Checked if (item.data() in data_items) else Qt.CheckState.Unchecked)
+
+    @property
+    def _line_edit(self) -> QLineEdit:
+        """Return the line edit required by this editable combo box."""
+        line_edit = self.lineEdit()
+        assert line_edit is not None, "CheckableComboBox must remain editable."
+        return line_edit
 
 
 class ChkComboTryWindow(QDialog):
