@@ -71,13 +71,17 @@ class CheckableComboBox(QComboBox):
         # reverse checked state on click.
         item.setCheckState(reverse_check_state(item.checkState()))
 
-    def resizeEvent(self, event: QResizeEvent) -> None:
+    def resizeEvent(self, event: QResizeEvent | None) -> None:
         """Recompute text to elide as needed"""
+        if event is None:
+            return
         self.updateText()
         super().resizeEvent(event)
 
-    def eventFilter(self, obj: QObject, event: QEvent) -> bool:
+    def eventFilter(self, obj: QObject | None, event: QEvent | None) -> bool:
         """Toggle the popup for line-edit releases and keep it open for viewport releases."""
+        if event is None:
+            return False
         if event.type() == QEvent.Type.MouseButtonRelease:
             if obj == self.lineEdit():
                 self.togglePopup()
@@ -88,7 +92,10 @@ class CheckableComboBox(QComboBox):
 
     def togglePopup(self) -> None:
         """Show or hide the popup according to its current state."""
-        return self.hidePopup() if self._opened else self.showPopup()
+        if self._opened:
+            self.hidePopup()
+        else:
+            self.showPopup()
 
     def showPopup(self) -> None:
         """When the popup is displayed, a click on the lineedit should close it"""
@@ -104,8 +111,10 @@ class CheckableComboBox(QComboBox):
         # Refresh the display text when closing
         self.updateText()
 
-    def timerEvent(self, event: QTimerEvent) -> None:
+    def timerEvent(self, event: QTimerEvent | None) -> None:
         """After timeout, kill timer, and re-enable click on line-edit"""
+        if event is None:
+            return
         self.killTimer(event.timerId())
         self._opened = False
 
@@ -115,7 +124,7 @@ class CheckableComboBox(QComboBox):
 
     def addCheckableText(self, text: str) -> None:
         """Append an unchecked item whose text is also its user-visible label."""
-        return self.addCheckableItem(text)
+        self.addCheckableItem(text)
 
     def addCheckableItem(self, text: str, data: Any = MISSING) -> None:
         """Append an unchecked row, optionally carrying caller-provided Qt item data."""
