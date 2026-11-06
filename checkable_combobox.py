@@ -54,7 +54,7 @@ class CheckableComboBox(QComboBox):
         # Update the text when an item is toggled
         # Model notifications carry indices and roles, not arguments for the text refresh.
         # https://doc.qt.io/qt-6/qabstractitemmodel.html#dataChanged
-        qconnect(self.model().dataChanged, lambda: self.updateText())
+        qconnect(self._item_model.dataChanged, lambda: self.updateText())
 
         # Hide and show popup when clicking the line edit
         self._line_edit.installEventFilter(self)
@@ -63,8 +63,9 @@ class CheckableComboBox(QComboBox):
         self.view().viewport().installEventFilter(self)
 
     def handle_item_pressed(self, index: QModelIndex) -> None:
-        """Check the pressed item if unchecked and vice-versa"""
-        item: QStandardItem = self.model().itemFromIndex(index)
+        """Check the pressed item if unchecked and vice versa."""
+        item = self._item_model.itemFromIndex(index)
+        assert item is not None, "The pressed index must refer to a populated item."
         # reverse checked state on click.
         item.setCheckState(reverse_check_state(item.checkState()))
 
@@ -119,7 +120,7 @@ class CheckableComboBox(QComboBox):
         item.setCheckState(Qt.CheckState.Unchecked)
         if data is not MISSING:
             item.setData(data)
-        self.model().appendRow(item)
+        self._item_model.appendRow(item)
 
     def setCheckableTexts(self, texts: Iterable[str]) -> None:
         self.clear()
@@ -127,7 +128,12 @@ class CheckableComboBox(QComboBox):
             self.addCheckableText(text)
 
     def items(self) -> Iterable[QStandardItem]:
-        return (self.model().item(i) for i in range(self.model().rowCount()))
+        """Yield populated standard items from the current model."""
+        model = self._item_model
+        for row in range(model.rowCount()):
+            item = model.item(row)
+            assert item is not None, "CheckableComboBox rows must contain standard items."
+            yield item
 
     def checkedItems(self) -> Sequence[QStandardItem]:
         return tuple(item for item in self.items() if item.checkState() == Qt.CheckState.Checked)
@@ -154,6 +160,13 @@ class CheckableComboBox(QComboBox):
         line_edit = self.lineEdit()
         assert line_edit is not None, "CheckableComboBox must remain editable."
         return line_edit
+
+    @property
+    def _item_model(self) -> QStandardItemModel:
+        """Return the standard-item model installed for checkable rows."""
+        model = self.model()
+        assert isinstance(model, QStandardItemModel), "CheckableComboBox requires a QStandardItemModel."
+        return model
 
 
 class ChkComboTryWindow(QDialog):
