@@ -77,6 +77,7 @@ class CheckableComboBox(QComboBox):
         super().resizeEvent(event)
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
+        """Toggle the popup for line-edit releases and keep it open for viewport releases."""
         if event.type() == QEvent.Type.MouseButtonRelease:
             if obj == self.lineEdit():
                 self.togglePopup()
@@ -86,6 +87,7 @@ class CheckableComboBox(QComboBox):
         return False
 
     def togglePopup(self) -> None:
+        """Show or hide the popup according to its current state."""
         return self.hidePopup() if self._opened else self.showPopup()
 
     def showPopup(self) -> None:
@@ -94,6 +96,7 @@ class CheckableComboBox(QComboBox):
         self._opened = True
 
     def hidePopup(self) -> None:
+        """Hide the popup and refresh the checked labels after closing."""
         super().hidePopup()
         self._opened = False
         # Used to prevent immediate reopening when clicking on the lineEdit
@@ -115,6 +118,7 @@ class CheckableComboBox(QComboBox):
         return self.addCheckableItem(text)
 
     def addCheckableItem(self, text: str, data: Any = MISSING) -> None:
+        """Append an unchecked row, optionally carrying caller-provided Qt item data."""
         item = QStandardItem()
         item.setText(text)
         item.setCheckable(True)
@@ -125,6 +129,7 @@ class CheckableComboBox(QComboBox):
         self._item_model.appendRow(item)
 
     def setCheckableTexts(self, texts: Iterable[str]) -> None:
+        """Replace all rows with unchecked items carrying the supplied labels."""
         self.clear()
         for text in texts:
             self.addCheckableText(text)
@@ -138,12 +143,15 @@ class CheckableComboBox(QComboBox):
             yield item
 
     def checkedItems(self) -> Sequence[QStandardItem]:
+        """Return checked standard items in model order."""
         return tuple(item for item in self.items() if item.checkState() == Qt.CheckState.Checked)
 
     def checkedData(self) -> Sequence[Any]:
+        """Return the stored Qt data of checked items in model order."""
         return tuple(item.data() for item in self.checkedItems())
 
     def checkedTexts(self) -> Sequence[str]:
+        """Return the labels of checked items in model order."""
         return tuple(item.text() for item in self.checkedItems())
 
     def setCheckedTexts(self, texts: Sequence[str]) -> None:
