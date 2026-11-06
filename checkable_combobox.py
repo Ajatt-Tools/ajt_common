@@ -23,6 +23,8 @@ def reverse_check_state(check_state: Qt.CheckState) -> Qt.CheckState:
         return Qt.CheckState.Checked
 
 
+# Keep the existing Qt-style API names until a separate rename can update their shared add-on callers.
+# noinspection PyPep8Naming
 class CheckableComboBox(QComboBox):
     """Allow multiple checked selections while displaying their labels in the line edit."""
 
