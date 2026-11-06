@@ -28,9 +28,9 @@ def reverse_check_state(check_state: Qt.CheckState) -> Qt.CheckState:
 class CheckableComboBox(QComboBox):
     """Allow multiple checked selections while displaying their labels in the line edit."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, parent: QWidget | None = None) -> None:
         """Install checkable-item handling and refresh the display after model changes."""
-        super().__init__(*args, **kwargs)
+        super().__init__(parent)
 
         # Initial state
         self._opened = False
