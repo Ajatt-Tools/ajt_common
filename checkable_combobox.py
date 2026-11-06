@@ -16,6 +16,7 @@ MISSING = object()
 
 
 def reverse_check_state(check_state: Qt.CheckState) -> Qt.CheckState:
+    """Toggle a checked item off and any other check state on."""
     if check_state == Qt.CheckState.Checked:
         return Qt.CheckState.Unchecked
     else:
