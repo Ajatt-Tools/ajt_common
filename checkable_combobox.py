@@ -189,6 +189,7 @@ class CheckableComboBox(QComboBox):
 
     @property
     def _view(self) -> QAbstractItemView:
+        """Return the popup view required by this initialized combo box."""
         view = self.view()
         assert view is not None, "CheckableComboBox requires a popup view."
         return view
