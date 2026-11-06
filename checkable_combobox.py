@@ -48,8 +48,10 @@ class CheckableComboBox(QComboBox):
         self.setItemDelegate(QStyledItemDelegate())
         self.setModel(QStandardItemModel(self))
 
-        # when any item get pressed
-        qconnect(self.view().pressed, self.handle_item_pressed)
+        # When any item get pressed.
+        # pressed supplies the QModelIndex consumed by handle_item_pressed().
+        # https://doc.qt.io/qt-6/qabstractitemview.html#pressed
+        qconnect(self._view.pressed, self.handle_item_pressed)
 
         # Update the text when an item is toggled
         # Model notifications carry indices and roles, not arguments for the text refresh.
@@ -60,7 +62,7 @@ class CheckableComboBox(QComboBox):
         self._line_edit.installEventFilter(self)
 
         # Prevent popup from closing when clicking on an item
-        self.view().viewport().installEventFilter(self)
+        self._viewport.installEventFilter(self)
 
     def handle_item_pressed(self, index: QModelIndex) -> None:
         """Check the pressed item if unchecked and vice versa."""
@@ -79,7 +81,7 @@ class CheckableComboBox(QComboBox):
             if obj == self.lineEdit():
                 self.togglePopup()
                 return True
-            if obj == self.view().viewport():
+            if obj == self._viewport:
                 return True
         return False
 
@@ -167,6 +169,19 @@ class CheckableComboBox(QComboBox):
         model = self.model()
         assert isinstance(model, QStandardItemModel), "CheckableComboBox requires a QStandardItemModel."
         return model
+
+    @property
+    def _view(self) -> QAbstractItemView:
+        view = self.view()
+        assert view is not None, "CheckableComboBox requires a popup view."
+        return view
+
+    @property
+    def _viewport(self) -> QWidget:
+        """Return the popup viewport on which this widget filters mouse releases."""
+        viewport = self._view.viewport()
+        assert viewport is not None, "The popup view must have a viewport."
+        return viewport
 
 
 class ChkComboTryWindow(QDialog):
