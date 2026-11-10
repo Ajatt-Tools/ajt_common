@@ -73,9 +73,13 @@ is_excluded() {
 	return 1
 }
 
+is_installed() {
+	[[ -x $(command -v "$1") ]]
+}
+
 exit_if_tools_not_installed() {
 	for prog in pyupgrade isort black; do
-		if ! [[ -x $(command -v "$prog") ]]; then
+		if ! is_installed "$prog"; then
 			die "command not found: $prog"
 		fi
 	done
