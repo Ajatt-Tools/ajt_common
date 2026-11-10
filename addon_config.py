@@ -157,10 +157,12 @@ class AddonConfigManager(AddonConfigABC):
     _default_config: dict
     _config: dict
     _allow_disk_writes: bool
+    _on_write_callback: Callable[[], None] | None
 
     def __init__(self, default: bool = False, *, allow_disk_writes: bool = True) -> None:
         """Load configuration and optionally restrict the manager to defaults or disable disk writes."""
         self._allow_disk_writes = allow_disk_writes
+        self._on_write_callback = None
         self._set_underlying_dicts()
         if default:
             self._config = self._default_config
@@ -203,6 +205,19 @@ class AddonConfigManager(AddonConfigABC):
             showCritical(str(ex), parent=mw, help=cast(str, None))
             # Restore previous config.
             self.write_config()
+        else:
+            # Anki's Config editor already wrote the settings to disk without calling write_config().
+            # Run the callback after updating self._config.
+            self._call_on_write_callback()
+
+    def on_write(self, callback: Callable[[], None]) -> None:
+        """Set the callback for successful writes and updates received from Anki's config editor."""
+        self._on_write_callback = callback
+
+    def _call_on_write_callback(self) -> None:
+        """Call the callback after writing settings to disk or updating self._config from Anki."""
+        if self._on_write_callback is not None:
+            self._on_write_callback()
 
     def dict_copy(self) -> dict:
         """Get a deep copy of the config dictionary."""
@@ -219,6 +234,7 @@ class AddonConfigManager(AddonConfigABC):
         if not self._allow_disk_writes:
             raise AddonConfigManagerError("Writing to disk disabled.")
         write_config(self.config)
+        self._call_on_write_callback()
 
 
 class ConfigSubViewBase(AddonConfigABC):
